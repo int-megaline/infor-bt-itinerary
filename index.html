@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>APSSE 출장 여정표</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Megaline APSSE 조선소 출장 (2026.12.08~12.10, 허페이 · 퉁링) 종합 여정 정보">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1013" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="APSSE Trip">
+<!-- PWA 단계에서 추가 예정: <link rel="manifest" href="manifest.json"> / sw.js 등록 -->
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!--BODY-START-->
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#overview" data-jump="overview"><b>MEGALINE · APSSE</b><span>허페이 · 퉁링 출장</span></a>
+    <nav class="nav-top" aria-label="섹션 이동">
+      <a href="#overview" data-jump="overview" data-nav="overview">개요</a>
+      <a href="#flight" data-jump="flight" data-nav="flight">항공</a>
+      <a href="#schedule" data-jump="schedule" data-nav="schedule">일정</a>
+      <a href="#hotel" data-jump="hotel" data-nav="hotel">숙소</a>
+      <a href="#site" data-jump="site" data-nav="site">조선소</a>
+      <a href="#check" data-jump="check" data-nav="check">점검 · 비상</a>
+    </nav>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="테마 전환">테마</button>
+  </div>
+</header>
+
+<main>
+  <!-- ① Overview -->
+  <section id="overview" class="hero" aria-label="출장 개요">
+    <div class="hero-main">
+      <div>
+        <div class="kicker">Business Trip Itinerary · Rev. R02</div>
+        <h1 id="heroTitle">APSSE 비즈니스 출장 종합 여정표</h1>
+        <div class="sub" id="heroSub"></div>
+        <div class="route-code" aria-label="인천에서 허페이, 퉁링">ICN<i></i>HFE<i></i>APSSE</div>
+      </div>
+      <div class="dday">
+        <span class="status-pill" id="statusPill">출발 전</span>
+        <div class="big" id="ddayBig">D-</div>
+        <div class="lbl" id="ddayLbl"></div>
+      </div>
+      <div class="travelers" id="travelers"></div>
+    </div>
+    <div class="kpis" id="kpis"></div>
+    <div class="clocks">
+      <div class="card clock"><div class="city">서울<small>KST · UTC+9</small></div><div><div class="time" id="clkSeoul">--:--</div><div class="date" id="clkSeoulD"></div></div></div>
+      <div class="card clock"><div class="city">허페이<small>CST · UTC+8 · 서울 −1h</small></div><div><div class="time" id="clkHefei">--:--</div><div class="date" id="clkHefeiD"></div></div></div>
+    </div>
+  </section>
+
+  <!-- ② Flight -->
+  <section id="flight" aria-labelledby="h-flight">
+    <div class="sec-head"><div><span class="eyebrow">Flight</span><h2 id="h-flight">왕복 항공 스케줄</h2></div><p>대한항공 직항 · 인천 ↔ 허페이 신차오</p></div>
+    <div class="passes" id="passes"></div>
+    <div class="card total-bar" id="flightTotal"></div>
+    <div class="card co2" id="co2"></div>
+    <ul class="notes" id="flightNotes"></ul>
+  </section>
+
+  <!-- ③ Schedule -->
+  <section id="schedule" aria-labelledby="h-schedule">
+    <div class="sec-head"><div><span class="eyebrow">Itinerary</span><h2 id="h-schedule">일자별 세부 일정</h2></div><p>현지 시각 기준 · 진행 중 일정 자동 강조</p></div>
+    <div class="day-tabs" id="dayTabs" role="tablist" aria-label="일자 선택"></div>
+    <div class="card gantt" id="gantt"></div>
+    <ol class="timeline" id="timeline" aria-live="polite"></ol>
+    <p class="tz-note">※ Day 1 출국 수속 · 항공 이동 출발 시각과 Day 3 인천 도착 시각은 한국 시각(KST), 그 외는 허페이 현지 시각(CST) 기준임.</p>
+  </section>
+
+  <!-- ④ Hotel -->
+  <section id="hotel" aria-labelledby="h-hotel">
+    <div class="sec-head"><div><span class="eyebrow">Hotel</span><h2 id="h-hotel">숙소 및 후보 비교</h2></div><p>조선소 이동 동선 · 비즈니스 환경 기준</p></div>
+    <div class="card hotel-pick" id="hotelPick"></div>
+    <div class="hotel-grid" id="hotelGrid"></div>
+    <div class="card price-chart" id="priceChart"></div>
+  </section>
+
+  <!-- ⑤ Site -->
+  <section id="site" aria-labelledby="h-site">
+    <div class="sec-head"><div><span class="eyebrow">Shipyard</span><h2 id="h-site">APSSE 조선소 현장 정보</h2></div><p>Anhui Port Sealand Sky Equipment</p></div>
+    <div class="site-grid">
+      <div class="card site-info" id="siteInfo"></div>
+      <div class="card route-card" id="routeCard"></div>
+    </div>
+  </section>
+
+  <!-- ⑥ Checklist & Emergency -->
+  <section id="check" aria-labelledby="h-check">
+    <div class="sec-head"><div><span class="eyebrow">Checklist</span><h2 id="h-check">출장 준비 점검</h2></div><p>체크 상태는 이 기기에만 저장됨</p></div>
+    <div class="card check-head">
+      <span class="small">준비 진행률</span>
+      <div class="progress" aria-hidden="true"><i id="ckBar"></i></div>
+      <span class="cnt" id="ckCnt">0 / 0</span>
+      <button class="reset-btn" id="ckReset" type="button">시트 기준으로 초기화</button>
+    </div>
+    <ul class="checks" id="checks"></ul>
+
+    <div class="sec-head" style="margin-top:16px"><div><span class="eyebrow">Emergency</span><h2>비상 대응 연락망</h2></div></div>
+    <div class="emg" id="emg"></div>
+  </section>
+
+  <!-- Footnotes -->
+  <section class="footnotes" id="sources" aria-labelledby="h-src">
+    <div class="sec-head"><div><span class="eyebrow">Sources</span><h2 id="h-src" style="font-size:16px">출처</h2></div></div>
+    <div id="footnotes"></div>
+    <div class="foot"><span id="rev"></span> · Interex Megaline 기술영업팀</div>
+  </section>
+</main>
+
+<nav class="nav-bottom" aria-label="섹션 이동">
+  <a href="#overview" data-jump="overview" data-nav="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h5"/></svg>개요</a>
+  <a href="#flight" data-jump="flight" data-nav="flight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2.5 13.5l19-6-6 13-3-6z"/><path d="M12.5 14.5l9-7"/></svg>항공</a>
+  <a href="#schedule" data-jump="schedule" data-nav="schedule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>일정</a>
+  <a href="#hotel" data-jump="hotel" data-nav="hotel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 19V8M3 14h18v5M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="1.5"/></svg>숙소</a>
+  <a href="#site" data-jump="site" data-nav="site"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 18h18l-2 3H5zM6 18V9h5v9M11 12h5l2 6M8 9V5"/></svg>조선소</a>
+  <a href="#check" data-jump="check" data-nav="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l2 2 4-4"/><rect x="4" y="4" width="16" height="16" rx="3"/></svg>점검</a>
+</nav>
+<!--BODY-END-->
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
