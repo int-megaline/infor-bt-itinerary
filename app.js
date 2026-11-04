@@ -69,7 +69,7 @@
       var d = new Date();
       return {
         t: d.toLocaleTimeString("ko-KR", { timeZone: tz, hour: "2-digit", minute: "2-digit", hour12: false }),
-        d: d.toLocaleDateString("ko-KR", { timeZone: tz, month: "long", day: "numeric", weekday: "short" })
+        d: d.toLocaleDateString("ko-KR", { timeZone: tz, month: "numeric", day: "numeric", weekday: "short" })
       };
     };
     var s = fmt("Asia/Seoul"), h2 = fmt("Asia/Shanghai");
@@ -112,6 +112,7 @@
   var curDay = store.get("apsse-day") || "d1";
   function placeLinks(it) {
     var out = [];
+    if (it.org) out.push('<a class="chip-link" target="_blank" rel="noopener" href="' + T.site.orgChart + '">' + ICON.ext + "조선소 조직도 (한국어)</a>");
     if (it.site) {
       out.push('<a class="chip-link" target="_blank" rel="noopener" href="' + siteLinks().g + '">' + ICON.ext + "Google 지도</a>");
       out.push('<a class="chip-link" target="_blank" rel="noopener" href="' + siteLinks().a + '">' + ICON.ext + "Amap 高德</a>");
@@ -129,7 +130,7 @@
   function renderGantt(day) {
     var x0 = 6, x1 = 22, W = 720, L = 8, R = 8, top = 18, barH = 30;
     var sx = function (h) { return L + (h - x0) / (x1 - x0) * (W - L - R); };
-    var svg = '<svg viewBox="0 0 ' + W + ' 64" role="img" aria-label="' + esc(day.label) + ' 시간대별 일정 막대">';
+    var svg = '<svg viewBox="0 0 ' + W + ' 76" role="img" aria-label="' + esc(day.label) + ' 시간대별 일정 막대">';
     for (var h = x0; h <= x1; h += 2) {
       var x = sx(h);
       svg += '<line class="grid" x1="' + x + '" x2="' + x + '" y1="' + (top - 4) + '" y2="' + (top + barH + 4) + '"/>';
@@ -262,6 +263,8 @@
         '<div><dt>좌표 (WGS84)</dt><dd><span class="mono">' + esc(s.dms) + '</span><br><span class="mono muted small">' + s.lat + ", " + s.lng + '</span><button class="copy-btn" data-copy="' + s.lat + "," + s.lng + '">복사</button></dd></div>' +
         '<div><dt>지도 바로가기</dt><dd><div class="links"><a class="chip-link" target="_blank" rel="noopener" href="' + l.g + '">' + ICON.ext + 'Google 지도</a><a class="chip-link" target="_blank" rel="noopener" href="' + l.a + '">' + ICON.ext + 'Amap 高德</a></div>' +
         '<span class="small muted">중국 현지에서는 Google 지도 접속 불가, Amap 사용 권장</span></dd></div>' +
+        '<div><dt>현장 조직도</dt><dd><div class="links"><a class="chip-link" target="_blank" rel="noopener" href="' + s.orgChart + '">' + ICON.ext + "조선소 조직도 (한국어)</a></div>" +
+        '<span class="small muted">NB25K 신조 대시보드 조직도 탭' + fn(7) + "</span></dd></div>" +
       "</dl>";
     $("#routeCard").innerHTML = "<h4>허페이 → 조선소 이동 경로</h4>" +
       '<ol class="route-steps">' + s.route.map(function (r, i) { return '<li><span class="dot">' + (i + 1) + "</span><span>" + esc(r) + "</span></li>"; }).join("") + "</ol>" +
@@ -299,9 +302,11 @@
       '<div class="card"><span class="k">' + esc(e.consulate.name) + fn(e.consulate.fn) + '</span><span class="tel">' + e.consulate.tel + "</span>" +
       '<div class="actions"><a class="btn primary" href="tel:' + e.consulate.tel.replace(/-/g, "") + '">전화 걸기</a><button class="btn" data-copy="' + e.consulate.tel + '">번호 복사</button></div>' +
       '<span class="small muted">출국 전 휴대폰 연락처 사전 등록 필수</span></div>' +
-      '<div class="card"><span class="k">현지 접견 의전 담당자</span><b>핫라인 확보 필요</b><span class="small muted">' + esc(e.local) + "</span></div>" +
+      '<div class="card"><span class="k">현지 접견 의전 담당자 핫라인</span><b>' + esc(e.local.name) + '</b><span class="small muted">' + esc(e.local.role) + '</span><span class="tel">' + e.local.tel + "</span>" +
+      '<div class="actions"><a class="btn primary" href="tel:' + e.local.tel.replace(/-/g, "") + '">전화 걸기</a><button class="btn" data-copy="' + e.local.tel + '">번호 복사</button>' +
+      '<a class="btn" target="_blank" rel="noopener" href="' + T.site.orgChart + '">조직도 (한국어) ↗</a></div></div>' +
       '<div class="card warn-card"><span class="k">일정 탄력 운영 가이드</span><span class="small">' + esc(e.swap) + "</span></div>";
-    $("#footnotes").innerHTML = '<ol>' + T.sources.map(function (s) {
+    $("#footnotes").innerHTML = '<ol>' + T.sources.slice().sort(function (a, b) { return a.n - b.n; }).map(function (s) {
       return '<li id="fn' + s.n + '">' + esc(s.t) + ' — <a href="' + s.u + '" target="_blank" rel="noopener">' + esc(s.u) + "</a></li>";
     }).join("") + "</ol>";
     $("#rev").textContent = "Rev. " + T.revision + " · 데이터 기준일 " + T.updated;
@@ -336,6 +341,51 @@
     $$("[data-nav]").forEach(function (a) { a.classList.toggle("on", a.getAttribute("data-nav") === cur); });
   }
 
+  /* ---------- PWA: service worker · 설치 · 네트워크 상태 ---------- */
+  function setupPWA() {
+    var standalone = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone === true;
+    if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+      try {
+        navigator.serviceWorker.register("sw.js").catch(function () {});
+      } catch (e) {}
+    }
+    var btn = $("#installBtn"), deferred = null;
+    window.addEventListener("beforeinstallprompt", function (e) {
+      e.preventDefault(); deferred = e;
+      if (!standalone) btn.hidden = false;
+    });
+    btn.addEventListener("click", function () {
+      if (!deferred) return;
+      deferred.prompt();
+      deferred.userChoice.then(function (r) {
+        if (r.outcome === "accepted") toast("앱 설치 진행됨");
+        deferred = null; btn.hidden = true;
+      });
+    });
+    window.addEventListener("appinstalled", function () { btn.hidden = true; toast("홈 화면에 설치 완료"); });
+
+    /* iOS Safari: 설치 버튼 이벤트가 없어 안내 카드 표시 */
+    var ua = navigator.userAgent || "";
+    var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    var isSafari = /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS/.test(ua);
+    if (isIOS && isSafari && !standalone && !store.get("apsse-ioshint") && location.protocol === "https:") {
+      $("#iosHint").hidden = false;
+    }
+    $("#iosHintClose").addEventListener("click", function () { $("#iosHint").hidden = true; store.set("apsse-ioshint", "1"); });
+
+    var net = function () {
+      var r = $("#rev"); if (!r) return;
+      var tag = $("#netState");
+      if (!navigator.onLine) {
+        if (!tag) { tag = document.createElement("span"); tag.id = "netState"; tag.className = "net-state"; r.after(tag); }
+        tag.textContent = "오프라인 · 저장된 정보 표시 중";
+      } else if (tag) tag.remove();
+    };
+    window.addEventListener("online", function () { net(); toast("온라인 연결됨"); });
+    window.addEventListener("offline", function () { net(); toast("오프라인 · 저장된 정보로 표시"); });
+    net();
+  }
+
   /* ---------- Boot ---------- */
   function boot() {
     renderHero(); tickHero();
@@ -344,6 +394,7 @@
     renderDayTabs(); renderDay();
     renderHotels(); renderSite(); renderChecks(); renderEmergency();
     applyTheme(theme);
+    setupPWA();
 
     $("#themeBtn").addEventListener("click", function () {
       theme = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length];

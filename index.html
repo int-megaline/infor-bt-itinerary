@@ -10,7 +10,12 @@
 <meta name="theme-color" content="#0e1013" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="APSSE Trip">
-<!-- PWA 단계에서 추가 예정: <link rel="manifest" href="manifest.json"> / sw.js 등록 -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -26,6 +31,9 @@
       <a href="#site" data-jump="site" data-nav="site">조선소</a>
       <a href="#check" data-jump="check" data-nav="check">점검 · 비상</a>
     </nav>
+    <button class="theme-btn install-btn" id="installBtn" type="button" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span>앱 설치</span>
+    </button>
     <button class="theme-btn" id="themeBtn" type="button" aria-label="테마 전환">테마</button>
   </div>
 </header>
@@ -47,10 +55,15 @@
       </div>
       <div class="travelers" id="travelers"></div>
     </div>
+    <div class="card ios-hint" id="iosHint" hidden>
+      <b>홈 화면에 앱으로 추가</b>
+      <span>Safari 하단 <em>공유</em> 버튼 → <em>홈 화면에 추가</em> 선택 시 앱처럼 설치되며, 한 번 열어 둔 내용은 오프라인에서도 열람 가능함.</span>
+      <button class="reset-btn" id="iosHintClose" type="button">닫기</button>
+    </div>
     <div class="kpis" id="kpis"></div>
     <div class="clocks">
-      <div class="card clock"><div class="city">서울<small>KST · UTC+9</small></div><div><div class="time" id="clkSeoul">--:--</div><div class="date" id="clkSeoulD"></div></div></div>
-      <div class="card clock"><div class="city">허페이<small>CST · UTC+8 · 서울 −1h</small></div><div><div class="time" id="clkHefei">--:--</div><div class="date" id="clkHefeiD"></div></div></div>
+      <div class="card clock"><div class="city">서울<small>KST · UTC+9</small></div><div class="tv"><div class="time" id="clkSeoul">--:--</div><div class="date" id="clkSeoulD"></div></div></div>
+      <div class="card clock"><div class="city">허페이<small>UTC+8 · 서울 −1h</small></div><div class="tv"><div class="time" id="clkHefei">--:--</div><div class="date" id="clkHefeiD"></div></div></div>
     </div>
   </section>
 

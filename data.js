@@ -104,7 +104,7 @@
             by: "전용 차량 (2.5시간 소요)", memo: "이동 중 차내 브리핑 진행, 현지 접견 담당관 유선 컨택" },
           { t: "11:00 ~ 12:30", s: "2026-12-09T11:00:00+08:00", e: "2026-12-09T12:30:00+08:00", h: [11, 12.5], cat: "work", tag: "상견례 & 브리핑",
             title: "출장자 소개 및 조선소 사업팀 소개 (슈레이 부총경리 이하 신조 관련 부서장 참석), 건조 현황 및 향후 일정 브리핑",
-            place: "APSSE 본관 2층 대회의실", by: "-", memo: "메가라인 출장단 소개(통역: 강준서 부장), 슈레이 부총경리 접견 및 신조선 건조 현황 · 향후 일정 수렴" },
+            place: "APSSE 본관 2층 대회의실", by: "-", org: true, memo: "메가라인 출장단 소개(통역: 강준서 부장), 슈레이 부총경리 접견 및 신조선 건조 현황 · 향후 일정 수렴" },
           { t: "12:30 ~ 13:45", s: "2026-12-09T12:30:00+08:00", e: "2026-12-09T13:45:00+08:00", h: [12.5, 13.75], cat: "meal", tag: "환영 오찬",
             title: "APSSE 주최 공식 환영 비즈니스 오찬 (슈레이 부총경리 주도, 생산 관련 부서장 참석)",
             place: "APSSE 측 준비 (장소 미정)", tbd: true, by: "도보 이동", memo: "슈레이 부총경리 및 생산 부서장 라포 형성, 현장 감리사(SMC) 및 이홍정 매니저 동석" },
@@ -160,7 +160,8 @@
       lat: 30.669139, lng: 117.262361,
       route: ["허페이 시내 (더 웨스틴)", "G3 징타이 고속도로", "퉁링시 쭝양현 APSSE"],
       routeTime: "편도 약 2.5시간",
-      flex: "현지 기상 / 야드 사정에 따라 Day 1 투어와 일정 맞교환 가능"
+      flex: "현지 기상 / 야드 사정에 따라 Day 1 투어와 일정 맞교환 가능",
+      orgChart: "https://int-megaline.github.io/NB25K/#orgchart-ko"
     },
 
     checklist: [
@@ -173,7 +174,7 @@
 
     emergency: {
       consulate: { name: "주상하이 대한민국 총영사관", tel: "+86-21-6295-5000", fn: 5 },
-      local: "현지 접견 의전 담당자 핫라인 확보 필요 (연락처 미기재)",
+      local: { name: "Xu Lei (슈레이)", role: "APSSE 부총경리 · 현지 접견 의전 담당", tel: "+86-189-0633-5985" },
       swap: "현지 기상 악화(폭우, 안개 등) 시 조선소 야드 실사가 어려울 수 있으므로, Day 1과 Day 2의 순서를 상호 스왑(Swap)하여 진행"
     },
 
@@ -183,6 +184,7 @@
       { n: 3, t: "Marriott — Four Points by Sheraton Hefei, Baohe", u: "https://marriott.com/HFEHF" },
       { n: 4, t: "Shangri-La — Shangri-La Hefei", u: "https://www.shangri-la.com/hefei/shangrila/about" },
       { n: 5, t: "외교부 — 주상하이 대한민국 총영사관", u: "https://overseas.mofa.go.kr/cn-shanghai-ko/index.do" },
+      { n: 7, t: "NB25K 신조 대시보드 — 조선소 조직도 (한국어)", u: "https://int-megaline.github.io/NB25K/#orgchart-ko" },
       { n: 6, t: "원본 여정표 — Google Sheets (업데이트 R02)", u: "https://docs.google.com/spreadsheets/d/18G8vPgRr7d0uz90ywfMK6sg9JoocS1nMksOqfvnTdlU/edit?gid=1867012816#gid=1867012816" }
     ]
   };

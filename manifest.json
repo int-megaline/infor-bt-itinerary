@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "APSSE 출장 여정표",
+  "short_name": "APSSE Trip",
+  "description": "Megaline APSSE 조선소 출장 (2026.12.08~12.10, 허페이 · 퉁링) 종합 여정 정보",
+  "lang": "ko",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f1215",
+  "theme_color": "#0f1215",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
