@@ -18,15 +18,23 @@
   };
 
   /* ---------- Theme ---------- */
-  /* 저장값이 없으면 기기 설정(system)을 따르고, 버튼은 라이트 ↔ 다크를 한 번에 전환 */
+  /* 현재 "화면에 실제 적용된" 테마를 기준으로 판단
+     (data-theme 속성 → 없으면 기기 설정). 미리보기 등 외부 화면이 data-theme을 먼저 지정한 경우에도
+     버튼 1회 클릭으로 라이트 ↔ 다크가 전환되도록 함 */
   function sysDark() { return !!(window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches); }
-  function isDark(t) { return t === "dark" || (t !== "light" && sysDark()); }
+  function curDark() {
+    var a = document.documentElement.getAttribute("data-theme");
+    if (a === "dark") return true;
+    if (a === "light") return false;
+    return sysDark();
+  }
+  function isDark() { return curDark(); }
   function applyTheme(t) {
     var r = document.documentElement;
-    if (t === "light" || t === "dark") r.setAttribute("data-theme", t); else r.removeAttribute("data-theme");
+    if (t === "light" || t === "dark") r.setAttribute("data-theme", t); /* 저장값 없으면 기존 상태 유지 */
     var b = $("#themeBtn");
     if (b) {
-      var dark = isDark(t);
+      var dark = curDark();
       b.innerHTML = (dark
         ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>'
         : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>')
@@ -609,7 +617,11 @@
     else showPage(store.get("apsse-page") || "overview", 0, true);
     if (window.matchMedia) {
       var mq = matchMedia("(prefers-color-scheme: dark)");
-      (mq.addEventListener ? mq.addEventListener.bind(mq, "change") : mq.addListener.bind(mq))(function () { applyTheme(theme); });
+      (mq.addEventListener ? mq.addEventListener.bind(mq, "change") : mq.addListener.bind(mq))(function () { applyTheme(null); });
+    }
+    /* 외부(미리보기 화면 등)에서 테마 속성을 바꾸면 버튼 표시만 동기화 */
+    if (window.MutationObserver) {
+      new MutationObserver(function () { applyTheme(null); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     }
     setInterval(function () { tickHero(); markNow(); }, 30000);
   }
