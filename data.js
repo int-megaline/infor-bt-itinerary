@@ -72,7 +72,7 @@
             by: "직항 (소요 3시간)", memo: "기내식 제공, 현지 시각 11:00 도착 (한국 대비 -1시간)" },
           { t: "11:00 ~ 12:30", s: "2026-12-08T11:00:00+08:00", e: "2026-12-08T12:30:00+08:00", h: [11, 12.5], cat: "move", tag: "입국 & 체크인",
             title: "입국 심사 및 수하물 수취 후 시내 호텔 이동, 체크인 / 짐 보관",
-            place: "더 웨스틴 허페이 바오허", g: gmap("The Westin Hefei Baohe"), a: amapSearch("合肥万达威斯汀酒店"),
+            place: "더 웨스틴 허페이 바오허 (예정)", g: gmap("The Westin Hefei Baohe"), a: amapSearch("合肥万达威斯汀酒店"),
             by: "전용 차량 (약 45분)", memo: "현지 로밍 / eSIM 데이터 연결 확인, 현지 화폐 / 알리페이 점검" },
           { t: "12:30 ~ 13:45", s: "2026-12-08T12:30:00+08:00", e: "2026-12-08T13:45:00+08:00", h: [12.5, 13.75], cat: "meal", tag: "5시간 투어 ①",
             title: "[오찬] 바오허 완다 플라자 동칭추(同庆楼) 정통 안후이 휘채(徽菜) 비즈니스 오찬",
@@ -97,7 +97,7 @@
         items: [
           { t: "07:30 ~ 08:30", s: "2026-12-09T07:30:00+08:00", e: "2026-12-09T08:30:00+08:00", h: [7.5, 8.5], cat: "rest", tag: "조식 & 출발",
             title: "호텔 조식 후 로비 집결, 퉁링 APSSE 이동 준비",
-            place: "호텔 로비 (더 웨스틴)", by: "전용 밴 대기", memo: "비즈니스 캐주얼 및 현장 안전화 지참 확인" },
+            place: "호텔 로비 (더 웨스틴 · 예정)", by: "전용 밴 대기", memo: "비즈니스 캐주얼 및 현장 안전화 지참 확인" },
           { t: "08:30 ~ 11:00", s: "2026-12-09T08:30:00+08:00", e: "2026-12-09T11:00:00+08:00", h: [8.5, 11], cat: "move", tag: "장거리 이동",
             title: "허페이 시내 → APSSE 조선소 이동 (G3 경유)",
             place: "안후이성 퉁링시 쭝양현 (M796+MW9)", site: true,
@@ -131,14 +131,14 @@
     ],
 
     hotels: [
-      { id: "h1", tag: "후보 1", name: "포 포인츠 바이 쉐라톤 허페이", en: "Four Points by Sheraton Hefei, Baohe", grade: "4성급", brand: "Marriott",
-        loc: "바오허구 시내 중심가 인접, 지하철역 도보권", access: "고속도로 진입 20분, 퉁링 이동 보통",
-        perks: "가성비 우수, 메리어트 포인트 적립, 깔끔한 룸", min: 95000, max: 120000, stars: 3, verdict: "실속형 출장 추천",
-        url: "https://marriott.com/HFEHF", fn: 3, a: amapSearch("合肥包河福朋喜来登酒店") },
-      { id: "h2", tag: "후보 2 · 확정", name: "더 웨스틴 허페이 바오허", en: "The Westin Hefei Baohe", grade: "5성급", brand: "Marriott",
+      { id: "h2", tag: "후보 1 · 예정", name: "더 웨스틴 허페이 바오허", en: "The Westin Hefei Baohe", grade: "5성급", brand: "Marriott",
         loc: "바오허 완다광장 인접, 허페이 남역 차 15분", access: "남부 고속도로 IC 직결 최적 (편도 2.3h 단축)",
         perks: "헤븐리 베드, 비즈니스 라운지, 우수한 피트니스", min: 140000, max: 170000, stars: 5, verdict: "최우수 추천 호텔", pick: true,
         url: "https://www.marriott.com/en-us/hotels/hfewi-the-westin-hefei-baohe/overview", fn: 2, a: amapSearch("合肥万达威斯汀酒店") },
+      { id: "h1", tag: "후보 2", name: "포 포인츠 바이 쉐라톤 허페이", en: "Four Points by Sheraton Hefei, Baohe", grade: "4성급", brand: "Marriott",
+        loc: "바오허구 시내 중심가 인접, 지하철역 도보권", access: "고속도로 진입 20분, 퉁링 이동 보통",
+        perks: "가성비 우수, 메리어트 포인트 적립, 깔끔한 룸", min: 95000, max: 120000, stars: 3, verdict: "실속형 출장 추천",
+        url: "https://marriott.com/HFEHF", fn: 3, a: amapSearch("合肥包河福朋喜来登酒店") },
       { id: "h3", tag: "후보 3", name: "샹그릴라 호텔 허페이", en: "Shangri-La Hefei", grade: "5성급", brand: "Shangri-La",
         loc: "루양구 중심, 포공사 · 이홍장 고거 관광 최인접", access: "도심 중심부로 출근 시간대 약간 정체 감안",
         perks: "최고급 외빈 접대 식당, 럭셔리 라운지 구비", min: 160000, max: 210000, stars: 4, verdict: "의전 및 관광 최적",
@@ -158,7 +158,7 @@
       plus: "M796+MW9",
       dms: "30°40'08.9\"N, 117°15'44.5\"E",
       lat: 30.669139, lng: 117.262361,
-      route: ["허페이 시내 (더 웨스틴)", "G3 징타이 고속도로", "퉁링시 쭝양현 APSSE"],
+      route: ["허페이 시내 (숙소 · 웨스틴 예정)", "G3 징타이 고속도로", "퉁링시 쭝양현 APSSE"],
       routeTime: "편도 약 2.5시간",
       flex: "현지 기상 / 야드 사정에 따라 Day 1 투어와 일정 맞교환 가능"
     },
@@ -207,7 +207,7 @@
       { id: "c2", cat: "보안", name: "야드 촬영 및 보안", detail: "도크 및 제작시설 내 사진 / 영상 촬영 승인 및 보안서약서(NDA) 준비", status: "준비완료" },
       { id: "c3", cat: "시찰", name: "브리핑 및 현장 자료", detail: "신조선 건조 현황표, 현장 감리(SMC) 보고서, 회사 소개서(중 · 영문본)", status: "확인필요" },
       { id: "c4", cat: "의전", name: "명함 및 기념품", detail: "중문 / 영문 비즈니스 명함(충분량), 경영진 증정용 공식 기념품", status: "확인필요" },
-      { id: "c5", cat: "결제", name: "모바일 페이 & 통신", detail: "알리페이 / 위챗페이 해외카드 등록 완료, 로밍 / 데이터 eSIM 점검", status: "확인필요" }
+      { id: "c5", cat: "결제", name: "모바일 페이 · 통신 · 현금", detail: "알리페이 / 위챗페이 해외카드 등록 완료, 로밍 / 데이터 eSIM 점검, 비상용 현금(위안화 CNY) 환전 · 준비", status: "확인필요" }
     ],
 
     emergency: {

@@ -30,7 +30,7 @@
       <a href="#hotel" data-jump="hotel" data-nav="hotel">숙소</a>
       <a href="#site" data-jump="site" data-nav="site">조선소</a>
       <a href="#org" data-jump="org" data-nav="org">조직도</a>
-      <a href="#check" data-jump="check" data-nav="check">점검 · 비상</a>
+      <a href="#check" data-jump="check" data-nav="check">기타 <small>(점검 · 비상 · 출처)</small></a>
     </nav>
     <button class="theme-btn install-btn" id="installBtn" type="button" hidden>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span>앱 설치</span>
@@ -39,6 +39,17 @@
     <button class="menu-btn" id="menuBtn" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="drawer">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
+  </div>
+  <div class="tabstrip-wrap">
+    <nav class="tabstrip" id="tabstrip" aria-label="탭 이동">
+      <a href="#overview" data-jump="overview" data-nav="overview">개요</a>
+      <a href="#flight" data-jump="flight" data-nav="flight">항공</a>
+      <a href="#schedule" data-jump="schedule" data-nav="schedule">일정</a>
+      <a href="#hotel" data-jump="hotel" data-nav="hotel">숙소</a>
+      <a href="#site" data-jump="site" data-nav="site">조선소</a>
+      <a href="#org" data-jump="org" data-nav="org">조직도</a>
+      <a href="#check" data-jump="check" data-nav="check">기타</a>
+    </nav>
   </div>
 </header>
 
@@ -59,11 +70,10 @@
       <button type="button" data-goday="d2">Day 2 · 12/09</button>
       <button type="button" data-goday="d3">Day 3 · 12/10</button>
     </div>
-    <a href="#hotel" data-jump="hotel" data-nav="hotel"><i>04</i>숙소<small>더 웨스틴 허페이 바오허</small></a>
+    <a href="#hotel" data-jump="hotel" data-nav="hotel"><i>04</i>숙소<small>예정 · 더 웨스틴 허페이 바오허 (미확정)</small></a>
     <a href="#site" data-jump="site" data-nav="site"><i>05</i>조선소<small>위치 · 이동 경로</small></a>
     <a href="#org" data-jump="org" data-nav="org"><i>06</i>조직도<small>APSSE 조직 · 연락처</small></a>
-    <a href="#check" data-jump="check" data-nav="check"><i>07</i>점검 · 비상<small>체크리스트 · 연락망</small></a>
-    <a href="#sources" data-jump="sources" data-nav="sources"><i>08</i>출처</a>
+    <a href="#check" data-jump="check" data-nav="check"><i>07</i>기타 (점검 · 비상)<small>체크리스트 · 비상 연락망 · 출처</small></a>
   </nav>
 </aside>
 
@@ -73,7 +83,7 @@
 
 <main>
   <!-- ① Overview -->
-  <section id="overview" class="hero" aria-label="출장 개요">
+  <section class="page" data-page="overview" id="overview" class="hero" aria-label="출장 개요">
     <div class="hero-main">
       <div>
         <div class="kicker">Business Trip Itinerary · Rev. R02</div>
@@ -101,7 +111,7 @@
   </section>
 
   <!-- ② Flight -->
-  <section id="flight" aria-labelledby="h-flight">
+  <section class="page" data-page="flight" id="flight" aria-labelledby="h-flight">
     <div class="sec-head"><div><span class="eyebrow">Flight</span><h2 id="h-flight">왕복 항공 스케줄</h2></div><p>대한항공 직항 · 인천 ↔ 허페이 신차오</p></div>
     <div class="passes" id="passes"></div>
     <div class="card total-bar" id="flightTotal"></div>
@@ -110,7 +120,7 @@
   </section>
 
   <!-- ③ Schedule -->
-  <section id="schedule" aria-labelledby="h-schedule">
+  <section class="page" data-page="schedule" id="schedule" aria-labelledby="h-schedule">
     <div class="sec-head"><div><span class="eyebrow">Itinerary</span><h2 id="h-schedule">일자별 세부 일정</h2></div><p>현지 시각 기준 · 진행 중 일정 자동 강조</p></div>
     <div class="day-tabs" id="dayTabs" role="tablist" aria-label="일자 선택"></div>
     <div class="card gantt" id="gantt"></div>
@@ -119,15 +129,15 @@
   </section>
 
   <!-- ④ Hotel -->
-  <section id="hotel" aria-labelledby="h-hotel">
-    <div class="sec-head"><div><span class="eyebrow">Hotel</span><h2 id="h-hotel">숙소 및 후보 비교</h2></div><p>조선소 이동 동선 · 비즈니스 환경 기준</p></div>
+  <section class="page" data-page="hotel" id="hotel" aria-labelledby="h-hotel">
+    <div class="sec-head"><div><span class="eyebrow">Hotel</span><h2 id="h-hotel">숙소 및 후보 비교</h2></div><p>숙소 미확정 · 조선소 이동 동선 · 비즈니스 환경 기준</p></div>
     <div class="card hotel-pick" id="hotelPick"></div>
     <div class="hotel-grid" id="hotelGrid"></div>
     <div class="card price-chart" id="priceChart"></div>
   </section>
 
   <!-- ⑤ Site -->
-  <section id="site" aria-labelledby="h-site">
+  <section class="page" data-page="site" id="site" aria-labelledby="h-site">
     <div class="sec-head"><div><span class="eyebrow">Shipyard</span><h2 id="h-site">APSSE 조선소 현장 정보</h2></div><p>Anhui Port Sealand Sky Equipment</p></div>
     <div class="site-grid">
       <div class="card site-info" id="siteInfo"></div>
@@ -136,7 +146,7 @@
   </section>
 
   <!-- ⑥ Org chart -->
-  <section id="org" aria-labelledby="h-org">
+  <section class="page" data-page="org" id="org" aria-labelledby="h-org">
     <div class="sec-head"><div><span class="eyebrow">Organization</span><h2 id="h-org">APSSE 조선소 조직도</h2></div><p id="orgAsOf"></p></div>
     <div class="kpis" id="orgKpis"></div>
     <div class="card org-tree" id="orgTree"></div>
@@ -153,8 +163,8 @@
   </section>
 
   <!-- ⑦ Checklist & Emergency -->
-  <section id="check" aria-labelledby="h-check">
-    <div class="sec-head"><div><span class="eyebrow">Checklist</span><h2 id="h-check">출장 준비 점검</h2></div><p>체크 상태는 이 기기에만 저장됨</p></div>
+  <section class="page" data-page="check" id="check" aria-labelledby="h-check">
+    <div class="sec-head"><div><span class="eyebrow">Checklist</span><h2 id="h-check">기타 · 출장 준비 점검</h2></div><p>체크 상태는 이 기기에만 저장됨</p></div>
     <div class="card check-head">
       <span class="small">준비 진행률</span>
       <div class="progress" aria-hidden="true"><i id="ckBar"></i></div>
@@ -165,14 +175,15 @@
 
     <div class="sec-head" style="margin-top:16px"><div><span class="eyebrow">Emergency</span><h2>비상 대응 연락망</h2></div></div>
     <div class="emg" id="emg"></div>
+
+    <details class="card src-fold footnotes" id="sources">
+      <summary><span class="eyebrow">Sources</span><b>출처</b><span class="muted small" id="srcCount"></span></summary>
+      <div id="footnotes"></div>
+    </details>
   </section>
 
-  <!-- Footnotes -->
-  <section class="footnotes" id="sources" aria-labelledby="h-src">
-    <div class="sec-head"><div><span class="eyebrow">Sources</span><h2 id="h-src" style="font-size:16px">출처</h2></div></div>
-    <div id="footnotes"></div>
-    <div class="foot"><span id="rev"></span> · Interex Megaline 기술영업팀</div>
-  </section>
+  <nav class="pager" id="pager" aria-label="이전 · 다음 탭"></nav>
+  <div class="foot"><span id="rev"></span> · Interex Megaline 기술영업팀</div>
 </main>
 
 <!--BODY-END-->

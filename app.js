@@ -18,19 +18,20 @@
   };
 
   /* ---------- Theme ---------- */
-  var THEMES = ["system", "light", "dark"];
-  var TLABEL = { system: "시스템", light: "라이트", dark: "다크" };
+  /* 저장값이 없으면 기기 설정(system)을 따르고, 버튼은 라이트 ↔ 다크를 한 번에 전환 */
+  function sysDark() { return !!(window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches); }
+  function isDark(t) { return t === "dark" || (t !== "light" && sysDark()); }
   function applyTheme(t) {
     var r = document.documentElement;
-    if (t === "system") r.removeAttribute("data-theme"); else r.setAttribute("data-theme", t);
+    if (t === "light" || t === "dark") r.setAttribute("data-theme", t); else r.removeAttribute("data-theme");
     var b = $("#themeBtn");
     if (b) {
-      var dark = t === "dark" || (t === "system" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
+      var dark = isDark(t);
       b.innerHTML = (dark
         ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>'
         : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>')
-        + "<span>" + TLABEL[t] + "</span>";
-      b.setAttribute("aria-label", "테마 전환 (현재: " + TLABEL[t] + ")");
+        + "<span>" + (dark ? "다크" : "라이트") + "</span>";
+      b.setAttribute("aria-label", (dark ? "라이트" : "다크") + " 모드로 전환");
     }
   }
   var theme = store.get("apsse-theme") || "system";
@@ -211,7 +212,7 @@
   function renderHotels() {
     var p = T.hotels.filter(function (h) { return h.pick; })[0];
     $("#hotelPick").innerHTML =
-      '<div class="main"><div class="label">Confirmed · 숙소 확정 (2박)</div><h3>' + esc(p.name) + fn(p.fn) + '</h3><div class="en">' + esc(p.en) + "</div>" +
+      '<div class="main"><div class="label">Planned · 숙소 예정 (2박 · 미확정)</div><h3>' + esc(p.name) + fn(p.fn) + '</h3><div class="en">' + esc(p.en) + "</div>" +
       '<div class="facts"><span class="fact">' + p.grade + " · " + p.brand + '</span><span class="fact">1박 ' + won(p.min) + " ~ " + won(p.max) + '</span><span class="fact">' + esc(p.loc) + "</span></div>" +
       '<div class="links"><a class="chip-link" target="_blank" rel="noopener" href="' + p.url + '">' + ICON.ext + "공식 페이지</a>" +
       '<a class="chip-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(p.en) + '">' + ICON.ext + "Google 지도</a>" +
@@ -242,7 +243,7 @@
       svg += '<text class="val" x="' + (sx(h.max) + 6) + '" y="' + (y + 14) + '" style="font-size:10.5px">' + h.min / 1000 + "–" + h.max / 1000 + "k</text>";
     });
     svg += "</svg>";
-    $("#priceChart").innerHTML = "<h4>1박 예상 요금 범위 비교</h4><p>단위: 천원(₩k) · 시트 기재 예상 요금 기준 · 녹색 = 확정 숙소</p><div style=\"overflow-x:auto\">" + svg + "</div>";
+    $("#priceChart").innerHTML = "<h4>1박 예상 요금 범위 비교</h4><p>단위: 천원(₩k) · 시트 기재 예상 요금 기준 · 녹색 = 예정 숙소 (후보 1)</p><div style=\"overflow-x:auto\">" + svg + "</div>";
   }
 
   /* ---------- Site ---------- */
@@ -309,6 +310,7 @@
       return '<li id="fn' + s.n + '">' + esc(s.t) + ' — <a href="' + s.u + '" target="_blank" rel="noopener">' + esc(s.u) + "</a></li>";
     }).join("") + "</ol>";
     $("#rev").textContent = "Rev. " + T.revision + " · 데이터 기준일 " + T.updated;
+    $("#srcCount").textContent = T.sources.length + "건 · 눌러서 펼치기";
   }
 
   /* ---------- Utilities ---------- */
@@ -327,18 +329,86 @@
     };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback); else fallback();
   }
-  function jump(id) {
-    var el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  /* ---------- Tab pages ---------- */
+  var PAGES = ["overview", "flight", "schedule", "hotel", "site", "org", "check"];
+  var PLABEL = { overview: "개요", flight: "항공", schedule: "일정", hotel: "숙소", site: "조선소", org: "조직도", check: "기타 (점검 · 비상)" };
+  var curPage = null;
+  var reduceMotion = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  function showPage(id, dir, keepScroll) {
+    if (PAGES.indexOf(id) < 0) id = PAGES[0];
+    var changed = id !== curPage;
+    curPage = id;
+    $$("main > .page").forEach(function (s) {
+      var on = s.getAttribute("data-page") === id;
+      s.hidden = !on;
+      s.classList.remove("in-l", "in-r");
+      if (on && changed && dir && !reduceMotion) { void s.offsetWidth; s.classList.add(dir > 0 ? "in-r" : "in-l"); }
+    });
+    $$("[data-nav]").forEach(function (a) {
+      var on = a.getAttribute("data-nav") === id;
+      a.classList.toggle("on", on);
+      if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    });
+    var act = $("#tabstrip .on");
+    if (act && act.scrollIntoView) { var strip = $("#tabstrip"); strip.scrollTo({ left: act.offsetLeft - strip.clientWidth / 2 + act.clientWidth / 2, behavior: reduceMotion ? "auto" : "smooth" }); }
+    renderPager();
+    try { history.replaceState(null, "", "#" + id); } catch (e) {}
+    store.set("apsse-page", id);
+    if (changed && !keepScroll) window.scrollTo(0, 0);
   }
-
-  /* ---------- Nav spy ---------- */
+  function stepPage(d) {
+    var i = PAGES.indexOf(curPage) + d;
+    if (i < 0 || i >= PAGES.length) return;
+    showPage(PAGES[i], d);
+  }
+  function renderPager() {
+    var i = PAGES.indexOf(curPage), p = PAGES[i - 1], n = PAGES[i + 1];
+    $("#pager").innerHTML =
+      (p ? '<button type="button" class="pg prev" data-step="-1"><small>← 이전</small><b>' + PLABEL[p] + "</b></button>" : "<span></span>") +
+      '<span class="pg-dots">' + PAGES.map(function (x) { return '<i class="' + (x === curPage ? "on" : "") + '"></i>'; }).join("") + "</span>" +
+      (n ? '<button type="button" class="pg next" data-step="1"><small>다음 →</small><b>' + PLABEL[n] + "</b></button>" : "<span></span>");
+  }
+  /* 탭 이름이면 탭 전환, 그 외 요소면 해당 요소가 속한 탭으로 전환 후 위치로 이동 */
+  function jump(id) {
+    if (PAGES.indexOf(id) > -1) { showPage(id, PAGES.indexOf(id) - PAGES.indexOf(curPage)); return; }
+    var el = document.getElementById(id); if (!el) return;
+    var pg = el.closest(".page");
+    if (pg) showPage(pg.getAttribute("data-page"), 0, true);
+    var d = el.closest("details"); if (d) d.open = true;
+    if (el.tagName === "DETAILS") el.open = true;
+    setTimeout(function () { el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" }); }, 30);
+  }
+  /* 좌우 스와이프 → 탭 전환 (가로 스크롤 영역 · 입력창 · 메뉴 열림 상태 제외) */
+  function setupSwipe() {
+    var sx = 0, sy = 0, st = 0, ok = false;
+    var main = $("main");
+    main.addEventListener("touchstart", function (e) {
+      if (e.touches.length !== 1) { ok = false; return; }
+      var t = e.target;
+      ok = !t.closest("input, textarea, select, .gantt-wrap, .price-chart, .tabstrip, [data-noswipe]") && !$("#drawer").classList.contains("open");
+      if (ok) {
+        var sc = t.closest(".ctable-wrap");
+        if (sc && sc.scrollWidth > sc.clientWidth) ok = false;
+      }
+      sx = e.touches[0].clientX; sy = e.touches[0].clientY; st = Date.now();
+    }, { passive: true });
+    main.addEventListener("touchend", function (e) {
+      if (!ok) return; ok = false;
+      var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.6 && Date.now() - st < 800) stepPage(dx < 0 ? 1 : -1);
+    }, { passive: true });
+    document.addEventListener("keydown", function (e) {
+      if (e.target.closest && e.target.closest("input, textarea, select")) return;
+      if (e.altKey || e.ctrlKey || e.metaKey) return;
+      if (e.key === "ArrowRight") stepPage(1); else if (e.key === "ArrowLeft") stepPage(-1);
+    });
+    $("#pager").addEventListener("click", function (e) { var b = e.target.closest("[data-step]"); if (b) stepPage(+b.getAttribute("data-step")); });
+    window.addEventListener("hashchange", function () {
+      var h = location.hash.replace("#", "");
+      if (h && h !== curPage) jump(h);
+    });
+  }
   function spy() {
-    var ids = ["overview", "flight", "schedule", "hotel", "site", "org", "check", "sources"];
-    var cur = ids[0], y = window.innerHeight * 0.3;
-    ids.forEach(function (id) { var el = document.getElementById(id); if (el && el.getBoundingClientRect().top < y) cur = id; });
-    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = "sources";
-    $$("[data-nav]").forEach(function (a) { a.classList.toggle("on", a.getAttribute("data-nav") === cur); });
     var tt = $("#toTop"); if (tt) tt.hidden = window.scrollY < 600;
   }
 
@@ -511,7 +581,7 @@
     setupPWA();
 
     $("#themeBtn").addEventListener("click", function () {
-      theme = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length];
+      theme = isDark(theme) ? "light" : "dark";
       store.set("apsse-theme", theme); applyTheme(theme);
     });
     $("#dayTabs").addEventListener("click", function (e) {
@@ -532,6 +602,11 @@
       var j = e.target.closest("[data-jump]"); if (j) { e.preventDefault(); jump(j.getAttribute("data-jump")); }
     });
     window.addEventListener("scroll", spy, { passive: true }); spy();
+    setupSwipe();
+    var h0 = location.hash.replace("#", "");
+    if (PAGES.indexOf(h0) > -1) showPage(h0, 0, true);
+    else if (h0 && document.getElementById(h0)) { showPage(PAGES[0]); jump(h0); }
+    else showPage(store.get("apsse-page") || "overview", 0, true);
     if (window.matchMedia) {
       var mq = matchMedia("(prefers-color-scheme: dark)");
       (mq.addEventListener ? mq.addEventListener.bind(mq, "change") : mq.addListener.bind(mq))(function () { applyTheme(theme); });
