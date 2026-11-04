@@ -615,3 +615,24 @@ main { gap: 28px; }
 .src-fold[open] summary::after { content: "−"; }
 .src-fold summary .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--fg-3); }
 .src-fold #footnotes { padding: 0 16px 16px; border-top: 1px solid var(--line); padding-top: 12px; }
+
+/* ---------- 일정 차트 툴팁 카드 ---------- */
+#gtip {
+  max-width: min(280px, calc(100vw - 16px)); width: max-content; padding: 10px 12px; border-radius: 10px;
+  background: var(--surface); color: var(--fg); border: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .16); display: grid; gap: 4px; font-size: 12.5px;
+}
+#gtip.pinned { pointer-events: auto; border-color: var(--fg-3); }
+.gtip-hd { display: flex; align-items: center; gap: 8px; }
+.gtip-hd b { font-family: var(--mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.gtip-hd .ev-tag { font-size: 10.5px; }
+.gtip-x { margin-left: auto; border: 0; background: none; font-size: 18px; line-height: 1; cursor: pointer; color: var(--fg-3); padding: 0 2px; }
+.gtip-tt { font-weight: 600; line-height: 1.4; }
+.gtip-pl { color: var(--fg-2); }
+.gtip-hint { color: var(--fg-3); font-size: 11.5px; }
+.gtip-go {
+  justify-self: start; margin-top: 4px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+  border: 0; border-radius: 8px; padding: 6px 12px; background: var(--ink); color: var(--ink-on);
+}
+.ev.flash { animation: ev-flash 1.4s ease; }
+@keyframes ev-flash { 0%, 40% { box-shadow: 0 0 0 2px var(--now); } 100% { box-shadow: 0 0 0 0 transparent; } }

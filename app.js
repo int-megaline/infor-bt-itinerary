@@ -157,23 +157,57 @@
       '<div class="legend">' + Object.keys(cats).map(function (c) { return '<span class="c-' + c + '"><i style="background:var(--c)"></i>' + CAT[c] + "</span>"; }).join("") + "</div></div>" +
       '<div class="gantt-wrap">' + svg + "</div>";
     $$(".seg", $("#gantt")).forEach(function (el) {
-      var it = day.items[+el.getAttribute("data-i")];
-      var show = function (e) {
-        var tip = $("#gtip") || document.body.appendChild(Object.assign(document.createElement("div"), { id: "gtip" }));
-        tip.hidden = false;
-        tip.innerHTML = "<b>" + esc(it.t) + "</b> · " + esc(it.tag) + "<br>" + esc(it.place);
-        var r = el.getBoundingClientRect();
-        var x = Math.min(Math.max(8, r.left + r.width / 2 - 120), window.innerWidth - 268);
-        tip.style.left = x + "px"; tip.style.top = Math.max(8, r.top - tip.offsetHeight - 8) + "px";
-      };
-      var hide = function () { var t = $("#gtip"); if (t) t.hidden = true; };
-      el.addEventListener("mouseenter", show); el.addEventListener("focus", show);
-      el.addEventListener("mouseleave", hide); el.addEventListener("blur", hide);
-      el.addEventListener("click", function () {
-        var target = $("#ev-" + day.id + "-" + el.getAttribute("data-i"));
-        if (target) { target.scrollIntoView({ behavior: "smooth", block: "center" }); target.querySelector("details") && (target.querySelector("details").open = true); }
+      var i = el.getAttribute("data-i");
+      el.addEventListener("mouseenter", function () { if (!gtipPinned) showGtip(el, day, i, false); });
+      el.addEventListener("mouseleave", function () { if (!gtipPinned) hideGtip(); });
+      el.addEventListener("click", function (e) { e.stopPropagation(); showGtip(el, day, i, true); });
+      el.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showGtip(el, day, i, true); }
       });
     });
+  }
+
+  /* 일정 차트 툴팁 카드: 마우스 오버 = 미리보기, 클릭/탭 = 고정 + "상세 일정 보기" 링크 */
+  var gtipPinned = false;
+  function gtipEl() {
+    var t = $("#gtip");
+    if (!t) {
+      t = document.createElement("div"); t.id = "gtip"; t.hidden = true; t.setAttribute("role", "dialog"); t.setAttribute("aria-label", "일정 요약");
+      document.body.appendChild(t);
+      t.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (e.target.closest(".gtip-x")) { hideGtip(); return; }
+        var go = e.target.closest("[data-goev]");
+        if (go) { hideGtip(); goEvent(go.getAttribute("data-goev")); }
+      });
+    }
+    return t;
+  }
+  function showGtip(el, day, i, pin) {
+    var it = day.items[+i], t = gtipEl();
+    gtipPinned = pin;
+    t.classList.toggle("pinned", pin);
+    t.innerHTML =
+      '<div class="gtip-hd"><b>' + esc(it.t) + '</b><span class="ev-tag c-' + it.cat + '">' + esc(it.tag) + "</span>" +
+        (pin ? '<button type="button" class="gtip-x" aria-label="닫기">×</button>' : "") + "</div>" +
+      '<div class="gtip-tt">' + esc(it.title) + "</div>" +
+      '<div class="gtip-pl">' + esc(it.place) + "</div>" +
+      (pin ? '<button type="button" class="gtip-go" data-goev="ev-' + day.id + "-" + i + '">상세 일정 보기 ↓</button>'
+           : '<div class="gtip-hint">클릭하면 상세 일정 보기 링크 표시</div>');
+    t.hidden = false;
+    var r = el.getBoundingClientRect(), w = t.offsetWidth, h = t.offsetHeight;
+    var x = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), window.innerWidth - w - 8);
+    var y = r.top - h - 8;
+    if (y < 64) y = r.bottom + 8; /* 상단 공간 부족 시 막대 아래에 표시 */
+    t.style.left = x + "px"; t.style.top = y + "px";
+    if (pin) { var g = t.querySelector(".gtip-go"); g && g.focus({ preventScroll: true }); }
+  }
+  function hideGtip() { var t = $("#gtip"); if (t) t.hidden = true; gtipPinned = false; }
+  function goEvent(id) {
+    var target = document.getElementById(id); if (!target) return;
+    target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+    var d = target.querySelector("details"); if (d) d.open = true;
+    target.classList.remove("flash"); void target.offsetWidth; target.classList.add("flash");
   }
   function splitTime(t) {
     var p = t.split("~");
@@ -340,11 +374,13 @@
   /* ---------- Tab pages ---------- */
   var PAGES = ["overview", "flight", "schedule", "hotel", "site", "org", "check"];
   var PLABEL = { overview: "개요", flight: "항공", schedule: "일정", hotel: "숙소", site: "조선소", org: "조직도", check: "기타 (점검 · 비상)" };
-  var curPage = null;
+  var curPage = null, pageScroll = {};
   var reduceMotion = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
   function showPage(id, dir, keepScroll) {
     if (PAGES.indexOf(id) < 0) id = PAGES[0];
     var changed = id !== curPage;
+    if (changed && curPage) pageScroll[curPage] = window.scrollY; /* 떠나는 탭의 스크롤 위치 기억 */
+    if (changed) hideGtip();
     curPage = id;
     $$("main > .page").forEach(function (s) {
       var on = s.getAttribute("data-page") === id;
@@ -362,7 +398,12 @@
     renderPager();
     try { history.replaceState(null, "", "#" + id); } catch (e) {}
     store.set("apsse-page", id);
-    if (changed && !keepScroll) window.scrollTo(0, 0);
+    /* 탭별 마지막 위치로 즉시 복원 (처음 여는 탭은 맨 위) — 부드러운 스크롤로 위로 끌려 올라가는 현상 방지 */
+    if (changed && !keepScroll) {
+      var y = pageScroll[id] || 0;
+      var maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      window.scrollTo({ top: Math.min(y, maxY), left: 0, behavior: "instant" });
+    }
   }
   function stepPage(d) {
     var i = PAGES.indexOf(curPage) + d;
@@ -611,6 +652,10 @@
     });
     window.addEventListener("scroll", spy, { passive: true }); spy();
     setupSwipe();
+    document.addEventListener("click", function () { if (gtipPinned) hideGtip(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && gtipPinned) hideGtip(); });
+    window.addEventListener("scroll", function () { var t = $("#gtip"); if (t && !t.hidden) hideGtip(); }, { passive: true });
+    window.addEventListener("resize", hideGtip);
     var h0 = location.hash.replace("#", "");
     if (PAGES.indexOf(h0) > -1) showPage(h0, 0, true);
     else if (h0 && document.getElementById(h0)) { showPage(PAGES[0]); jump(h0); }
