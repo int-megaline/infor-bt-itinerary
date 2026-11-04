@@ -112,7 +112,7 @@
   var curDay = store.get("apsse-day") || "d1";
   function placeLinks(it) {
     var out = [];
-    if (it.org) out.push('<a class="chip-link" target="_blank" rel="noopener" href="' + T.site.orgChart + '">' + ICON.ext + "조선소 조직도 (한국어)</a>");
+    if (it.org) out.push('<a class="chip-link" href="#org" data-jump="org">참석 조직 · 조직도 보기 ↓</a>');
     if (it.site) {
       out.push('<a class="chip-link" target="_blank" rel="noopener" href="' + siteLinks().g + '">' + ICON.ext + "Google 지도</a>");
       out.push('<a class="chip-link" target="_blank" rel="noopener" href="' + siteLinks().a + '">' + ICON.ext + "Amap 高德</a>");
@@ -263,8 +263,7 @@
         '<div><dt>좌표 (WGS84)</dt><dd><span class="mono">' + esc(s.dms) + '</span><br><span class="mono muted small">' + s.lat + ", " + s.lng + '</span><button class="copy-btn" data-copy="' + s.lat + "," + s.lng + '">복사</button></dd></div>' +
         '<div><dt>지도 바로가기</dt><dd><div class="links"><a class="chip-link" target="_blank" rel="noopener" href="' + l.g + '">' + ICON.ext + 'Google 지도</a><a class="chip-link" target="_blank" rel="noopener" href="' + l.a + '">' + ICON.ext + 'Amap 高德</a></div>' +
         '<span class="small muted">중국 현지에서는 Google 지도 접속 불가, Amap 사용 권장</span></dd></div>' +
-        '<div><dt>현장 조직도</dt><dd><div class="links"><a class="chip-link" target="_blank" rel="noopener" href="' + s.orgChart + '">' + ICON.ext + "조선소 조직도 (한국어)</a></div>" +
-        '<span class="small muted">NB25K 신조 대시보드 조직도 탭' + fn(7) + "</span></dd></div>" +
+        '<div><dt>현장 조직도</dt><dd><div class="links"><a class="chip-link" href="#org" data-jump="org">조직도 · 연락처 보기 ↓</a></div></dd></div>' +
       "</dl>";
     $("#routeCard").innerHTML = "<h4>허페이 → 조선소 이동 경로</h4>" +
       '<ol class="route-steps">' + s.route.map(function (r, i) { return '<li><span class="dot">' + (i + 1) + "</span><span>" + esc(r) + "</span></li>"; }).join("") + "</ol>" +
@@ -304,7 +303,7 @@
       '<span class="small muted">출국 전 휴대폰 연락처 사전 등록 필수</span></div>' +
       '<div class="card"><span class="k">현지 접견 의전 담당자 핫라인</span><b>' + esc(e.local.name) + '</b><span class="small muted">' + esc(e.local.role) + '</span><span class="tel">' + e.local.tel + "</span>" +
       '<div class="actions"><a class="btn primary" href="tel:' + e.local.tel.replace(/-/g, "") + '">전화 걸기</a><button class="btn" data-copy="' + e.local.tel + '">번호 복사</button>' +
-      '<a class="btn" target="_blank" rel="noopener" href="' + T.site.orgChart + '">조직도 (한국어) ↗</a></div></div>' +
+      '<a class="btn" href="#org" data-jump="org">조직도 보기</a></div></div>' +
       '<div class="card warn-card"><span class="k">일정 탄력 운영 가이드</span><span class="small">' + esc(e.swap) + "</span></div>";
     $("#footnotes").innerHTML = '<ol>' + T.sources.slice().sort(function (a, b) { return a.n - b.n; }).map(function (s) {
       return '<li id="fn' + s.n + '">' + esc(s.t) + ' — <a href="' + s.u + '" target="_blank" rel="noopener">' + esc(s.u) + "</a></li>";
@@ -335,10 +334,124 @@
 
   /* ---------- Nav spy ---------- */
   function spy() {
-    var ids = ["overview", "flight", "schedule", "hotel", "site", "check"];
+    var ids = ["overview", "flight", "schedule", "hotel", "site", "org", "check", "sources"];
     var cur = ids[0], y = window.innerHeight * 0.3;
     ids.forEach(function (id) { var el = document.getElementById(id); if (el && el.getBoundingClientRect().top < y) cur = id; });
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = "sources";
     $$("[data-nav]").forEach(function (a) { a.classList.toggle("on", a.getAttribute("data-nav") === cur); });
+    var tt = $("#toTop"); if (tt) tt.hidden = window.scrollY < 600;
+  }
+
+  /* ---------- Hamburger drawer ---------- */
+  function setupMenu() {
+    var drawer = $("#drawer"), scrim = $("#scrim"), btn = $("#menuBtn");
+    var open = function () {
+      scrim.hidden = false; drawer.classList.add("open"); drawer.setAttribute("aria-hidden", "false");
+      btn.setAttribute("aria-expanded", "true"); document.body.classList.add("lock");
+      setTimeout(function () { var f = $("#menuClose"); f && f.focus(); }, 50);
+    };
+    var close = function (refocus) {
+      scrim.hidden = true; drawer.classList.remove("open"); drawer.setAttribute("aria-hidden", "true");
+      btn.setAttribute("aria-expanded", "false"); document.body.classList.remove("lock");
+      if (refocus) btn.focus();
+    };
+    btn.addEventListener("click", open);
+    $("#menuClose").addEventListener("click", function () { close(true); });
+    scrim.addEventListener("click", function () { close(false); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && drawer.classList.contains("open")) close(true); });
+    drawer.addEventListener("click", function (e) {
+      var d = e.target.closest("[data-goday]");
+      if (d) {
+        curDay = d.getAttribute("data-goday"); store.set("apsse-day", curDay); renderDay();
+        close(false); jump("schedule"); return;
+      }
+      if (e.target.closest("[data-jump]")) close(false);
+    });
+    $("#toTop").addEventListener("click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); });
+  }
+
+  /* ---------- Org chart ---------- */
+  function cnTel(t) { var d = String(t).replace(/[^\d+]/g, ""); return d.charAt(0) === "+" ? d : "+86" + d; }
+  function telHTML(t) { return t ? '<a href="tel:' + cnTel(t) + '">' + esc(t) + "</a>" : ""; }
+  function renderOrg() {
+    var O = T.org; if (!O) return;
+    var all = [], total = 0;
+    O.centers.forEach(function (c) { c.sum = 0; c.depts.forEach(function (d) { d.c = c.c; c.sum += d.n; total += d.n; all.push(d); }); });
+    var top = all.slice().sort(function (a, b) { return b.n - a.n; })[0];
+    $("#orgAsOf").innerHTML = "조선소 제공 조직도 " + O.asOf + " 개정본 기준" + fn(7);
+    $("#orgKpis").innerHTML = [
+      ["총 인원 (약)", total + "명", "부서 인원 합계 · 개략치"],
+      ["센터", O.centers.length + "개", O.centers.map(function (c) { return c.ko.replace("센터", ""); }).join(" · ")],
+      ["부서 / 작업장", all.length + "개", "생산기술센터 " + O.centers[3].depts.length + "개 최다"],
+      ["최대 부서", top.ko, "약 " + top.n + "명 · 전체의 " + Math.round(top.n / total * 100) + "%"]
+    ].map(function (k) {
+      return '<div class="card kpi"><div class="k">' + k[0] + '</div><div class="v">' + esc(k[1]) + '</div><div class="s">' + esc(k[2]) + "</div></div>";
+    }).join("");
+
+    var node = function (e, cls, extra) {
+      return '<div class="onode ' + (cls || "") + '"><div class="t">' + esc(e.ko) + '</div><div class="zh">' + e.zh + "</div>" +
+        (e.name ? '<div class="who">' + esc(e.name) + "</div>" : "") + (e.tel ? '<div class="tel">' + esc(e.tel) + "</div>" : "") + (extra || "") + "</div>";
+    };
+    $("#orgTree").innerHTML =
+      node(O.chair, "exec") + '<div class="vl"></div>' +
+      '<div class="mgmt"><div class="gm">' + node(O.gm, "exec") + '</div><div class="side"><span class="hl"></span>' +
+        node(O.dgm, "", '<span class="host">' + esc(O.dgm.note) + "</span>") + "</div></div>" +
+      '<div class="vl"></div>' +
+      '<div class="centers">' + O.centers.map(function (c) {
+        return '<div class="center oc' + c.c + '"><div class="chead"><b>' + esc(c.ko) + "</b><span>" + c.zh + " · 약 " + c.sum + "명 · " + c.depts.length + "개 부서</span></div>" +
+          '<ul class="depts">' + c.depts.map(function (d) {
+            var rows = [["부서장", esc(d.head)], ["연락처", '<span class="mono">' + telHTML(d.tel) + "</span>"]];
+            if (d.pm) rows.push(["프로젝트", esc(d.pm)], ["PM 연락처", '<span class="mono">' + telHTML(d.pmTel) + "</span>"]);
+            if (d.mail) rows.push(["이메일", esc(d.mail)]);
+            return '<li><details class="dept"><summary><span class="dn">' + esc(d.ko) + "<small>" + d.zh + '</small></span><span class="dh">' + esc(d.head) + '</span><span class="pill">약 ' + d.n + "명</span></summary>" +
+              "<dl>" + rows.map(function (r) { return "<div><dt>" + r[0] + "</dt><dd>" + r[1] + "</dd></div>"; }).join("") + "</dl></details></li>";
+          }).join("") + "</ul></div>";
+      }).join("") + "</div>" +
+      '<div class="org-legend">부서 카드를 누르면 부서장 · 프로젝트 담당 · 연락처 표시</div>';
+
+    /* 부서별 인원 막대 (0~40명 스케일) */
+    var mx = 40;
+    $("#orgBar").innerHTML = "<h4>부서별 인원</h4><div class=\"cap\">단위: 명(약) · 색상 = 소속 센터</div>" +
+      '<div class="hbars">' + all.slice().sort(function (a, b) { return b.n - a.n; }).map(function (d) {
+        return '<div class="hbar oc' + d.c + '"><span class="lb">' + esc(d.ko) + '</span><div class="tr"><div class="fl" style="width:' + (d.n / mx * 100) + '%"></div></div><span class="vv">' + d.n + "</span></div>";
+      }).join("") + '</div><div class="haxis"><span></span><div class="ticks"><span>0</span><span>10</span><span>20</span><span>30</span><span>40</span></div><span></span></div>';
+
+    $("#orgShare").innerHTML = "<h4>센터별 인원 비중</h4><div class=\"cap\">총 약 " + total + "명 기준</div>" +
+      '<div class="stack" role="img" aria-label="센터별 인원 비중">' + O.centers.map(function (c) {
+        var p = c.sum / total * 100;
+        return '<span class="oc' + c.c + '" style="width:' + p + '%" title="' + esc(c.ko) + " " + c.sum + '명">' + (p >= 9 ? Math.round(p) + "%" : "") + "</span>";
+      }).join("") + "</div>" +
+      '<ul class="share-list">' + O.centers.map(function (c) {
+        return '<li class="oc' + c.c + '"><i></i><span>' + esc(c.ko) + "</span><b>" + c.sum + "명</b><em>" + (c.sum / total * 100).toFixed(1) + "%</em></li>";
+      }).join("") + "</ul>";
+
+    /* 연락처 표 */
+    var rows = [
+      { c: 0, ko: O.gm.ko, zh: O.gm.zh, head: O.gm.name, tel: O.gm.tel, mail: O.gm.mail },
+      { c: 0, ko: O.dgm.ko, zh: O.dgm.zh, head: O.dgm.name, tel: O.dgm.tel, mail: O.dgm.mail, hl: true }
+    ];
+    O.centers.forEach(function (c) { c.depts.forEach(function (d) {
+      rows.push(d);
+      if (d.zh === "生产部") rows.push({ c: 4, ko: O.pm.ko, zh: O.pm.zh, head: O.pm.name, tel: O.pm.tel, mail: O.pm.mail, pmNote: true });
+    }); });
+    var td = function (l, v, cls) { return '<td data-l="' + l + '" class="' + (v ? (cls || "") : "empty") + '">' + (v || "–") + "</td>"; };
+    $("#orgTable").innerHTML = "<thead><tr><th>조직</th><th>담당자</th><th>연락처</th><th>프로젝트 담당</th><th>연락처</th><th>이메일</th></tr></thead><tbody>" +
+      rows.map(function (r) {
+        var key = [r.ko, r.zh, r.head, r.tel, r.pm, r.pmTel, r.mail].join(" ").toLowerCase();
+        return '<tr class="oc' + (r.c || 1) + (r.hl ? " hl" : "") + '" data-k="' + esc(key) + '">' +
+          '<td class="org-cell"><i' + (r.c ? "" : ' style="background:var(--fg)"') + "></i>" + esc(r.ko) + (r.pmNote ? fn(7) : "") + "<small>" + r.zh + "</small></td>" +
+          td("담당자", esc(r.head)) + td("연락처", telHTML(r.tel), "ph") +
+          td("프로젝트 담당", r.pm ? esc(r.pm) : "") + td("PM 연락처", r.pmTel ? telHTML(r.pmTel) : "", "ph") +
+          td("이메일", r.mail ? esc(r.mail) : "", "wide") + "</tr>";
+      }).join("") + "</tbody>";
+    $("#orgNotes").innerHTML = O.notes.map(function (n) { return "<li>" + esc(n) + "</li>"; }).join("") +
+      "<li>" + esc(O.pm.note) + "</li><li>전화번호를 누르면 중국 국가번호(+86)를 붙여 발신됨.</li>";
+
+    $("#orgSearch").addEventListener("input", function () {
+      var q = this.value.trim().toLowerCase(), n = 0;
+      $$("#orgTable tbody tr").forEach(function (tr) { var on = !q || tr.getAttribute("data-k").indexOf(q) > -1; tr.hidden = !on; if (on) n++; });
+      $("#orgEmpty").hidden = n > 0;
+    });
   }
 
   /* ---------- PWA: service worker · 설치 · 네트워크 상태 ---------- */
@@ -394,6 +507,7 @@
     renderDayTabs(); renderDay();
     renderHotels(); renderSite(); renderChecks(); renderEmergency();
     applyTheme(theme);
+    renderOrg(); setupMenu();
     setupPWA();
 
     $("#themeBtn").addEventListener("click", function () {

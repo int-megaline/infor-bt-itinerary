@@ -160,8 +160,46 @@
       lat: 30.669139, lng: 117.262361,
       route: ["허페이 시내 (더 웨스틴)", "G3 징타이 고속도로", "퉁링시 쭝양현 APSSE"],
       routeTime: "편도 약 2.5시간",
-      flex: "현지 기상 / 야드 사정에 따라 Day 1 투어와 일정 맞교환 가능",
-      orgChart: "https://int-megaline.github.io/NB25K/#orgchart-ko"
+      flex: "현지 기상 / 야드 사정에 따라 Day 1 투어와 일정 맞교환 가능"
+    },
+
+    /* 조선소 조직도 — 원본: 조선소 제공 「Shipyard Organization Chart(261016).docx」 (2026.10.16 개정본)
+       직함 · 부서명은 중문 원문 기준 한국어 번역, 인원은 개략치(約) */
+    org: {
+      asOf: "2026.10.16",
+      company: "안휘항항육해장비유한공사",
+      companyEn: "Anhui Port & Shipping Sealand Equipment Co., Ltd.",
+      chair: { ko: "회장 (이사회 의장)", zh: "董事长" },
+      gm: { ko: "총경리 (사장)", zh: "总经理", name: "Zhang Nian", tel: "+86-186-6339-3018", mail: "zhangnian0921@163.com" },
+      dgm: { ko: "부총경리 (부사장)", zh: "副总经理", name: "Xu Lei", tel: "+86-189-0633-5985", mail: "18906335985@163.com", note: "본 출장 현지 접견 · 의전 담당" },
+      pm: { ko: "프로젝트 매니저", zh: "项目经理", name: "Que Jun", tel: "18818877103", mail: "99740903@qq.com", note: "원본 조직도에는 없고 연락처 목록에만 기재 · 10.16 개정 시 Shen Songhong → Que Jun 변경" },
+      centers: [
+        { c: 1, ko: "경영관리센터", zh: "企业管理中心", depts: [
+          { ko: "총무부", zh: "综合部", n: 5, head: "Hu Tiansheng", tel: "19956266282" },
+          { ko: "재무부", zh: "财务部", n: 3, head: "Tao Wenting", tel: "18756206703" }
+        ] },
+        { c: 2, ko: "안전센터", zh: "安全中心", depts: [
+          { ko: "안전환경부", zh: "安全环保部", n: 8, head: "Yang Haijun", tel: "15605452217", pm: "He Zhen", pmTel: "13034061134" },
+          { ko: "품질관리부", zh: "质量部", n: 8, head: "Li Ming", tel: "13705535271", pm: "Zhou Yang", pmTel: "18855616717", mail: "13035480827@163.com" },
+          { ko: "지원부", zh: "保障部", n: 9, head: "Yao Chunfeng", tel: "13780993680" }
+        ] },
+        { c: 3, ko: "구매영업센터", zh: "采购营销中心", depts: [
+          { ko: "구매부", zh: "采购部", n: 13, head: "Fang Jun", tel: "15005625652", pm: "Luo Jiahao", pmTel: "19156207049", mail: "pd@ahsealand.com" },
+          { ko: "영업부", zh: "经营部", n: 3, head: "Zhao Yucheng", tel: "18263341393", pm: "Zhu Zhuo", pmTel: "17754118976", mail: "anhuisealand_bd@163.com" }
+        ] },
+        { c: 4, ko: "생산기술센터", zh: "生产技术中心", depts: [
+          { ko: "생산부", zh: "生产部", n: 36, head: "Hu Xiaoming", tel: "13376332722", pm: "Yang Wei", pmTel: "18908632998" },
+          { ko: "기술부", zh: "技术部", n: 9, head: "Huang Xiaochuan", tel: "17729633790", pm: "Wang Kunjun", pmTel: "19163379651", mail: "dd@ahsealand.com" },
+          { ko: "선체 작업장", zh: "船体车间", n: 28, head: "Ji Dabin", tel: "18763358877", pm: "Xue Guofeng", pmTel: "18067190995" },
+          { ko: "기전 작업장", zh: "机电车间", n: 19, head: "Lai Qingzhong", tel: "18063392398" },
+          { ko: "도장 작업장", zh: "涂装车间", n: 17, head: "Liang Junhua", tel: "13857221622" }
+        ] }
+      ],
+      notes: [
+        "한국어 직함 · 부서명은 중문 원문(董事长 · 总经理 · 副总经理 등) 기준 번역이며, 중국 기업 관행상 总经理는 '총경리(사장)'로 표기함.",
+        "부서별 인원은 원본 기재 개략치(約)임.",
+        "프로젝트 매니저(项目经理)는 원본 조직도에는 없고 연락처 목록에만 기재되어 있어 연락처 표에만 반영함."
+      ]
     },
 
     checklist: [
@@ -184,7 +222,8 @@
       { n: 3, t: "Marriott — Four Points by Sheraton Hefei, Baohe", u: "https://marriott.com/HFEHF" },
       { n: 4, t: "Shangri-La — Shangri-La Hefei", u: "https://www.shangri-la.com/hefei/shangrila/about" },
       { n: 5, t: "외교부 — 주상하이 대한민국 총영사관", u: "https://overseas.mofa.go.kr/cn-shanghai-ko/index.do" },
-      { n: 7, t: "NB25K 신조 대시보드 — 조선소 조직도 (한국어)", u: "https://int-megaline.github.io/NB25K/#orgchart-ko" },
+      { n: 7, t: "조선소 제공 원본 — Shipyard Organization Chart(261016).docx (사내 수령 문서, 접근 권한 필요)", u: "https://drive.google.com/file/d/13rPqBZ6IKu5Xi5WQQLcEZCRVE7LHW-II/view?usp=drivesdk" },
+      { n: 8, t: "NB25K 신조 대시보드 — 조직도 탭 (조직도 업데이트 이력)", u: "https://int-megaline.github.io/NB25K/" },
       { n: 6, t: "원본 여정표 — Google Sheets (업데이트 R02)", u: "https://docs.google.com/spreadsheets/d/18G8vPgRr7d0uz90ywfMK6sg9JoocS1nMksOqfvnTdlU/edit?gid=1867012816#gid=1867012816" }
     ]
   };

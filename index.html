@@ -29,14 +29,47 @@
       <a href="#schedule" data-jump="schedule" data-nav="schedule">일정</a>
       <a href="#hotel" data-jump="hotel" data-nav="hotel">숙소</a>
       <a href="#site" data-jump="site" data-nav="site">조선소</a>
+      <a href="#org" data-jump="org" data-nav="org">조직도</a>
       <a href="#check" data-jump="check" data-nav="check">점검 · 비상</a>
     </nav>
     <button class="theme-btn install-btn" id="installBtn" type="button" hidden>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span>앱 설치</span>
     </button>
     <button class="theme-btn" id="themeBtn" type="button" aria-label="테마 전환">테마</button>
+    <button class="menu-btn" id="menuBtn" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="drawer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
   </div>
 </header>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" aria-label="전체 메뉴" aria-hidden="true">
+  <div class="drawer-hd">
+    <div><b>APSSE 출장 여정표</b><span>2026.12.08 ~ 12.10 · 허페이 · 퉁링</span></div>
+    <button class="menu-btn" id="menuClose" type="button" aria-label="메뉴 닫기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <nav class="drawer-nav" aria-label="섹션 이동">
+    <a href="#overview" data-jump="overview" data-nav="overview"><i>01</i>개요<small>D-Day · 출장자 · 시차</small></a>
+    <a href="#flight" data-jump="flight" data-nav="flight"><i>02</i>항공<small>KE 155 / KE 156</small></a>
+    <a href="#schedule" data-jump="schedule" data-nav="schedule"><i>03</i>일정<small>일자별 세부 일정</small></a>
+    <div class="drawer-sub">
+      <button type="button" data-goday="d1">Day 1 · 12/08</button>
+      <button type="button" data-goday="d2">Day 2 · 12/09</button>
+      <button type="button" data-goday="d3">Day 3 · 12/10</button>
+    </div>
+    <a href="#hotel" data-jump="hotel" data-nav="hotel"><i>04</i>숙소<small>더 웨스틴 허페이 바오허</small></a>
+    <a href="#site" data-jump="site" data-nav="site"><i>05</i>조선소<small>위치 · 이동 경로</small></a>
+    <a href="#org" data-jump="org" data-nav="org"><i>06</i>조직도<small>APSSE 조직 · 연락처</small></a>
+    <a href="#check" data-jump="check" data-nav="check"><i>07</i>점검 · 비상<small>체크리스트 · 연락망</small></a>
+    <a href="#sources" data-jump="sources" data-nav="sources"><i>08</i>출처</a>
+  </nav>
+</aside>
+
+<button class="to-top" id="toTop" type="button" aria-label="맨 위로" hidden>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+</button>
 
 <main>
   <!-- ① Overview -->
@@ -102,7 +135,24 @@
     </div>
   </section>
 
-  <!-- ⑥ Checklist & Emergency -->
+  <!-- ⑥ Org chart -->
+  <section id="org" aria-labelledby="h-org">
+    <div class="sec-head"><div><span class="eyebrow">Organization</span><h2 id="h-org">APSSE 조선소 조직도</h2></div><p id="orgAsOf"></p></div>
+    <div class="kpis" id="orgKpis"></div>
+    <div class="card org-tree" id="orgTree"></div>
+    <div class="org-charts">
+      <div class="card org-chart" id="orgBar"></div>
+      <div class="card org-chart" id="orgShare"></div>
+    </div>
+    <div class="org-contacts">
+      <div class="sub-head"><h3>조직 연락처</h3><input type="search" id="orgSearch" placeholder="부서 · 이름 · 번호 검색" aria-label="연락처 검색"></div>
+      <div class="ctable-wrap"><table class="ctable" id="orgTable"></table></div>
+      <p class="muted small" id="orgEmpty" hidden>검색 결과 없음</p>
+    </div>
+    <ol class="org-notes" id="orgNotes"></ol>
+  </section>
+
+  <!-- ⑦ Checklist & Emergency -->
   <section id="check" aria-labelledby="h-check">
     <div class="sec-head"><div><span class="eyebrow">Checklist</span><h2 id="h-check">출장 준비 점검</h2></div><p>체크 상태는 이 기기에만 저장됨</p></div>
     <div class="card check-head">
@@ -125,14 +175,6 @@
   </section>
 </main>
 
-<nav class="nav-bottom" aria-label="섹션 이동">
-  <a href="#overview" data-jump="overview" data-nav="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h5"/></svg>개요</a>
-  <a href="#flight" data-jump="flight" data-nav="flight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2.5 13.5l19-6-6 13-3-6z"/><path d="M12.5 14.5l9-7"/></svg>항공</a>
-  <a href="#schedule" data-jump="schedule" data-nav="schedule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>일정</a>
-  <a href="#hotel" data-jump="hotel" data-nav="hotel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 19V8M3 14h18v5M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="1.5"/></svg>숙소</a>
-  <a href="#site" data-jump="site" data-nav="site"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 18h18l-2 3H5zM6 18V9h5v9M11 12h5l2 6M8 9V5"/></svg>조선소</a>
-  <a href="#check" data-jump="check" data-nav="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l2 2 4-4"/><rect x="4" y="4" width="16" height="16" rx="3"/></svg>점검</a>
-</nav>
 <!--BODY-END-->
 <script src="data.js"></script>
 <script src="app.js"></script>
