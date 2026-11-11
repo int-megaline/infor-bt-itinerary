@@ -25,7 +25,7 @@
       { name: "정준택", role: "해운총괄" },
       { name: "남상태", role: "고문" },
       { name: "최진욱", role: "기술영업팀장" },
-      { name: "강준서", role: "부장 · 현장 통역" }
+      { name: "강준서", role: "부장 · 현장 통역", join: "현지 합류" }
     ],
     kpis: [
       { label: "출장 기간", value: "2박 3일", sub: "2026-12-08 ~ 12-10" },
@@ -75,21 +75,38 @@
             place: "샹그릴라 호텔 허페이 (확정)", g: gmap("Shangri-La Hefei"), a: amapSearch("合肥香格里拉大酒店"),
             by: "전용 차량 (약 45분)", memo: "현지 로밍 / eSIM 데이터 연결 확인, 현지 화폐 / 알리페이 점검" },
           { t: "12:30 ~ 13:45", s: "2026-12-08T12:30:00+08:00", e: "2026-12-08T13:45:00+08:00", h: [12.5, 13.75], cat: "meal", tag: "5시간 투어 ①",
-            title: "[오찬] 바오허 완다 플라자 동칭추(同庆楼) 정통 안후이 휘채(徽菜) 비즈니스 오찬",
-            place: "바오허 완다 동칭추(同庆楼)", g: gmap("同庆楼 包河万达 合肥"), a: amapSearch("同庆楼 包河万达"),
-            by: "차량 이동 (샹그릴라 → 바오허 완다)", recheck: true, memo: "취궤어(臭鳜鱼) 등 대표 휘채 요리 명가, 비즈니스 룸 구비 (완다몰 3층). 숙소가 웨스틴(완다 인접)에서 샹그릴라로 변경되어 이동 시간 · 식당 위치 재확인 필요" },
+            title: "[오찬] 샹그릴라 호텔 허페이 내 레스토랑 비즈니스 오찬",
+            place: "샹그릴라 호텔 허페이 (호텔 레스토랑)", g: gmap("Shangri-La Hefei"), a: amapSearch("合肥香格里拉大酒店"),
+            photo: "images/hotel-shangrila.jpg", photoCap: "샹그릴라 호텔 허페이",
+            by: "호텔 내 이동", memo: "체크인 후 호텔 내 오찬, 오후 투어 일정 및 동선 최종 확인" },
           { t: "13:45 ~ 15:15", s: "2026-12-08T13:45:00+08:00", e: "2026-12-08T15:15:00+08:00", h: [13.75, 15.25], cat: "tour", tag: "5시간 투어 ②",
             title: "[역사] 포공사(包公祠) 및 포하공원 유적 시찰",
             place: "포공사 (판관 포청천 사당)", g: gmap("Baogong Memorial Temple Hefei"), a: amapSearch("包公祠"),
-            by: "차량 이동 (15분)", memo: "허페이 대표 역사 인물 유적 탐방, 호수 공원 산책" },
+            by: "차량 이동 (15분)", fnInfo: 9,
+            info: [
+              ["개요", "북송(北宋)의 청백리 포증(包拯, 포청천)을 기리는 사당 · 포하공원(包公园) 내 위치"],
+              ["연혁", "1539년 '포공사'로 명명, 1882년 이홍장(李鸿章)이 은 2,800냥을 출연해 중건"],
+              ["볼거리", "포공 소상, 염천(廉泉) 우물, 포공묘(墓园), 청풍각(清风阁 · 높이 42m)"],
+              ["관람", "겨울 08:00 ~ 17:30 · 포공사 20위안 / 포공원 통합권 50위안"],
+              ["주소", "合肥市 包河区 芜湖路 72号"]
+            ],
+            memo: "허페이 대표 역사 인물 유적 탐방, 호수 공원 산책" },
           { t: "15:15 ~ 17:30", s: "2026-12-08T15:15:00+08:00", e: "2026-12-08T17:30:00+08:00", h: [15.25, 17.5], cat: "tour", tag: "5시간 투어 ③",
             title: "[문화] 이홍장 고거(李鸿章故居) 및 회하로 보행가 참관",
             place: "이홍장 고거 전시관", g: gmap("Former Residence of Li Hongzhang Hefei"), a: amapSearch("李鸿章故居"),
-            by: "차량 이동 (15분)", memo: "청나라 말기 양무운동 및 근대 외교 역사 관람, 회하로 보행가 탐방" },
+            by: "차량 이동 (15분)", fnInfo: 10,
+            info: [
+              ["개요", "청말 양무운동을 이끈 중신 이홍장(李鸿章, 허페이 출신)의 가족 고택 · 현재 이홍장 고거 진열관"],
+              ["규모", "고택 약 2,000㎡ (대문 · 전청 · 중청 · 주마루) + 회계(淮系) 전시관 약 1,500㎡"],
+              ["전시", "이홍장 생애전, 이홍장 묵보(墨宝)전, 회군(淮军)과 중국 근대화 전시"],
+              ["관람", "겨울 08:30 ~ 17:30 · 폐관 시각과 일정 종료(17:30)가 같아 관람 시간 배분 유의"],
+              ["주소", "合肥市 庐阳区 淮河路 208号 (회하로 보행가 중간)"]
+            ],
+            memo: "청나라 말기 양무운동 및 근대 외교 역사 관람, 회하로 보행가 탐방" },
           { t: "17:30 ~ 20:30", s: "2026-12-08T17:30:00+08:00", e: "2026-12-08T20:30:00+08:00", h: [17.5, 20.5], cat: "meal", tag: "석식 & 휴식",
-            title: "[석식] 바오허 완다 플라자 루저우타이타이(庐州太太) 디너 후 호텔 복귀",
-            place: "바오허 완다 플라자 식당가", g: gmap("庐州太太 包河万达 合肥"), a: amapSearch("庐州太太 包河万达"),
-            by: "차량 이동 (식사 후 샹그릴라 복귀)", recheck: true, memo: "안후이 가정식 명가 '루저우타이타이' 추천, 익일 조선소 출장자료 점검. 숙소 변경에 따라 호텔 인근 식당으로 변경 검토 가능" }
+            title: "[석식] 현지 식당 디너 후 호텔 복귀 · 휴식",
+            place: "현지 통역 강준서 부장 선정 (장소 미정)", tbd: true,
+            by: "차량 이동", memo: "식당 선정 및 예약: 강준서 부장(현지 통역) 담당, 익일 조선소 출장자료 점검" }
         ]
       },
       {
@@ -101,6 +118,7 @@
           { t: "08:30 ~ 11:00", s: "2026-12-09T08:30:00+08:00", e: "2026-12-09T11:00:00+08:00", h: [8.5, 11], cat: "move", tag: "장거리 이동",
             title: "허페이 시내 → APSSE 조선소 이동 (G3 경유)",
             place: "안후이성 퉁링시 쭝양현 (M796+MW9)", site: true,
+            photo: "images/apsse-aerial.jpg", photoCap: "APSSE 조선소 전경 (장강 연안)",
             by: "전용 차량 (2.5시간 소요)", memo: "이동 중 차내 브리핑 진행, 현지 접견 담당관 유선 컨택" },
           { t: "11:00 ~ 12:30", s: "2026-12-09T11:00:00+08:00", e: "2026-12-09T12:30:00+08:00", h: [11, 12.5], cat: "work", tag: "상견례 & 브리핑",
             title: "출장자 소개 및 조선소 사업팀 소개 (슈레이 부총경리 이하 신조 관련 부서장 참석), 건조 현황 및 향후 일정 브리핑",
@@ -110,7 +128,7 @@
             place: "APSSE 측 준비 (장소 미정)", tbd: true, by: "도보 이동", memo: "슈레이 부총경리 및 생산 부서장 라포 형성, 현장 감리사(SMC) 및 이홍정 매니저 동석" },
           { t: "13:45 ~ 17:00", s: "2026-12-09T13:45:00+08:00", e: "2026-12-09T17:00:00+08:00", h: [13.75, 17], cat: "work", tag: "조선소 현장시찰",
             title: "조선소 제작 현장 방문 및 현황 브리핑 (선박 건조 선대, 안벽 설비 및 장비 제작라인 정밀 실사)",
-            place: "APSSE 건조 안벽 & 안벽 야드", by: "야드 내 차량 이동", memo: "메가라인 고용 현장 감리사(SMC) 및 파견 감독관(이홍정 매니저) 현장 인솔 및 건조 현황 상세 브리핑" },
+            place: "APSSE 건조 안벽 & 안벽 야드", photo: "images/apsse-gantry.jpg", photoCap: "선대 및 갠트리 크레인", by: "야드 내 차량 이동", memo: "메가라인 고용 현장 감리사(SMC) 및 파견 감독관(이홍정 매니저) 현장 인솔 및 건조 현황 상세 브리핑" },
           { t: "17:00 ~ 18:00", s: "2026-12-09T17:00:00+08:00", e: "2026-12-09T18:00:00+08:00", h: [17, 18], cat: "work", tag: "시찰 정리 & 간담",
             title: "조선소 현장 시찰 결과 정리 및 감리단 · 감독관 종합 간담회 (단순 방문으로 기술협의 없음)",
             place: "APSSE 선주 사무실", by: "야드 내 차량 이동", memo: "기술협의 제외, SMC 감리사 및 이홍정 매니저 실사 소견 점검 및 석식 이동 준비" },
@@ -136,19 +154,11 @@
         perks: "최고급 외빈 접대 식당, 럭셔리 라운지 구비", min: 160000, max: 210000, stars: 4, verdict: "의전 및 관광 최적", pick: true,
         deal: "1박 약 ¥200 수준 (메가라인 가격 협의 완료)", booker: "강준서 부장 (허페이 현장 · 부킹 담당)",
         photo: "images/hotel-shangrila.jpg",
-        url: "https://www.shangri-la.com/hefei/shangrila/about", fn: 4, a: amapSearch("合肥香格里拉大酒店") },
-      { id: "h2", tag: "검토 후보", name: "더 웨스틴 허페이 바오허", en: "The Westin Hefei Baohe", grade: "5성급", brand: "Marriott",
-        loc: "바오허 완다광장 인접, 허페이 남역 차 15분", access: "남부 고속도로 IC 직결 최적 (편도 2.3h 단축)",
-        perks: "헤븐리 베드, 비즈니스 라운지, 우수한 피트니스", min: 140000, max: 170000, stars: 5, verdict: "최우수 추천 호텔",
-        url: "https://www.marriott.com/en-us/hotels/hfewi-the-westin-hefei-baohe/overview", fn: 2, a: amapSearch("合肥万达威斯汀酒店") },
-      { id: "h1", tag: "검토 후보", name: "포 포인츠 바이 쉐라톤 허페이", en: "Four Points by Sheraton Hefei, Baohe", grade: "4성급", brand: "Marriott",
-        loc: "바오허구 시내 중심가 인접, 지하철역 도보권", access: "고속도로 진입 20분, 퉁링 이동 보통",
-        perks: "가성비 우수, 메리어트 포인트 적립, 깔끔한 룸", min: 95000, max: 120000, stars: 3, verdict: "실속형 출장 추천",
-        url: "https://marriott.com/HFEHF", fn: 3, a: amapSearch("合肥包河福朋喜来登酒店") }
+        url: "https://www.shangri-la.com/hefei/shangrila/about", fn: 2, a: amapSearch("合肥香格里拉大酒店") }
     ],
     hotelReasons: [
       { k: "요금 협의 완료", v: "메가라인과 가격 협의 완료, 1박 약 200위안 수준. 부킹은 허페이 현장 강준서 부장 담당" },
-      { k: "관광 동선", v: "루양구 도심 중심으로 Day 1 투어지(포공사 · 이홍장 고거) 최인접" },
+      { k: "관광 동선", v: "루양구 도심 중심으로 Day 1 투어지(포공사 · 이홍장 고거) 최인접, Day 1 오찬은 호텔 내 진행" },
       { k: "의전 환경", v: "최고급 외빈 접대 식당 및 럭셔리 라운지 구비" },
       { k: "유의 사항", v: "도심 중심부 위치로 Day 2 아침(08:30) 퉁링 출발 시 출근 시간대 정체 감안 필요" }
     ],
@@ -204,8 +214,8 @@
         { name: "12,000 DWT 자항식 데크 바지선", owner: "싱가포르", specs: [["길이 (LOA)", "115.98 m"], ["폭 (B)", "28.00 m"], ["재화중량", "12,600 t"], ["선급", "BV"]] }
       ],
       brochures: [
-        { t: "조선소 소개 브로셔", d: "APSSE 조선소 소개 자료", u: "https://drive.google.com/file/d/1u7Rcw6LWXRXjK4x9xtXhdgKVX46i1em2/view?usp=sharing", fn: 9 },
-        { t: "그룹 소개 브로셔", d: "안휘성항항그룹 소개 자료", u: "https://drive.google.com/file/d/1onI7ylMRwDjge3gz3Dol6OCntUe59oRH/view?usp=sharing", fn: 10 }
+        { t: "조선소 소개 브로셔", d: "APSSE 조선소 소개 자료", u: "https://drive.google.com/file/d/1u7Rcw6LWXRXjK4x9xtXhdgKVX46i1em2/view?usp=sharing", fn: 7 },
+        { t: "그룹 소개 브로셔", d: "안휘성항항그룹 소개 자료", u: "https://drive.google.com/file/d/1onI7ylMRwDjge3gz3Dol6OCntUe59oRH/view?usp=sharing", fn: 8 }
       ]
     },
 
@@ -249,30 +259,35 @@
     },
 
     checklist: [
+      { id: "b1", cat: "예약", name: "항공권 예약", detail: "대한항공 KE 155 / KE 156 왕복 (인천 ↔ 허페이) 발권 및 e-티켓 확인 · 국내 출발 3인 (강준서 부장 현지 합류)", status: "확인필요" },
+      { id: "b2", cat: "예약", name: "호텔 예약", detail: "샹그릴라 호텔 허페이 2박 (12/08 ~ 12/10) · 협의가 약 ¥200/박 · 부킹 담당 강준서 부장", status: "확인필요" },
       { id: "c1", cat: "안전", name: "보호장구 (PPE)", detail: "도크 진입용 안전모 (스틸토 안전화, 반사조끼는 현장 착용 필수 요구사항 아님)", status: "준비완료" },
       { id: "c2", cat: "보안", name: "야드 촬영 및 보안", detail: "도크 및 제작시설 내 사진 / 영상 촬영 승인 및 보안서약서(NDA) 준비", status: "준비완료" },
       { id: "c3", cat: "시찰", name: "브리핑 및 현장 자료", detail: "신조선 건조 현황표, 현장 감리(SMC) 보고서, 회사 소개서(중 · 영문본)", status: "확인필요" },
       { id: "c4", cat: "의전", name: "명함 및 기념품", detail: "중문 / 영문 비즈니스 명함(충분량), 경영진 증정용 공식 기념품", status: "확인필요" },
-      { id: "c5", cat: "결제", name: "모바일 페이 · 통신 · 현금", detail: "알리페이 / 위챗페이 해외카드 등록 완료, 로밍 / 데이터 eSIM 점검, 비상용 현금(위안화 CNY) 환전 · 준비", status: "확인필요" }
+      { id: "p1", cat: "결제", name: "모바일 페이", detail: "알리페이 / 위챗페이 해외카드 등록 완료", status: "준비완료" },
+      { id: "p2", cat: "통신", name: "통신 (로밍 · eSIM)", detail: "로밍 / 데이터 eSIM 개통 및 현지 데이터 연결 점검", status: "확인필요" },
+      { id: "p3", cat: "현금", name: "현금 (위안화)", detail: "비상용 현금(위안화 CNY) 환전 · 준비, 카드 결제 불가 상황 대비", status: "확인필요" }
     ],
 
+
     emergency: {
-      consulate: { name: "주상하이 대한민국 총영사관", tel: "+86-21-6295-5000", fn: 5 },
+      consulate: { name: "주상하이 대한민국 총영사관", tel: "+86-21-6295-5000", fn: 3 },
       local: { name: "Xu Lei (슈레이)", role: "APSSE 부총경리 · 현지 접견 의전 담당", tel: "+86-189-0633-5985" },
       swap: "현지 기상 악화(폭우, 안개 등) 시 조선소 야드 실사가 어려울 수 있으므로, Day 1과 Day 2의 순서를 상호 스왑(Swap)하여 진행"
     },
 
     sources: [
       { n: 1, t: "Google Flights — ICN ↔ HFE 왕복 항공편 조회 결과", u: "https://www.google.com/travel/flights/s/eHGTD66wDYmVztSE8" },
-      { n: 2, t: "Marriott — The Westin Hefei Baohe", u: "https://www.marriott.com/en-us/hotels/hfewi-the-westin-hefei-baohe/overview" },
-      { n: 3, t: "Marriott — Four Points by Sheraton Hefei, Baohe", u: "https://marriott.com/HFEHF" },
-      { n: 4, t: "Shangri-La — Shangri-La Hefei", u: "https://www.shangri-la.com/hefei/shangrila/about" },
-      { n: 5, t: "외교부 — 주상하이 대한민국 총영사관", u: "https://overseas.mofa.go.kr/cn-shanghai-ko/index.do" },
-      { n: 7, t: "조선소 제공 원본 — Shipyard Organization Chart(261016).docx (사내 수령 문서, 접근 권한 필요)", u: "https://drive.google.com/file/d/13rPqBZ6IKu5Xi5WQQLcEZCRVE7LHW-II/view?usp=drivesdk" },
-      { n: 8, t: "NB25K 신조 대시보드 — 조직도 탭 (조직도 업데이트 이력)", u: "https://int-megaline.github.io/NB25K/" },
-      { n: 9, t: "APSSE 조선소 소개 브로셔 (Google Drive) — 기업 개요 · 설비 · 제품 정보", u: "https://drive.google.com/file/d/1u7Rcw6LWXRXjK4x9xtXhdgKVX46i1em2/view?usp=sharing" },
-      { n: 10, t: "안휘성항항그룹 소개 브로셔 (Google Drive)", u: "https://drive.google.com/file/d/1onI7ylMRwDjge3gz3Dol6OCntUe59oRH/view?usp=sharing" },
-      { n: 6, t: "원본 여정표 — Google Sheets (업데이트 R02)", u: "https://docs.google.com/spreadsheets/d/18G8vPgRr7d0uz90ywfMK6sg9JoocS1nMksOqfvnTdlU/edit?gid=1867012816#gid=1867012816" }
+      { n: 2, t: "Shangri-La — Shangri-La Hefei", u: "https://www.shangri-la.com/hefei/shangrila/about" },
+      { n: 3, t: "외교부 — 주상하이 대한민국 총영사관", u: "https://overseas.mofa.go.kr/cn-shanghai-ko/index.do" },
+      { n: 4, t: "원본 여정표 — Google Sheets (업데이트 R02)", u: "https://docs.google.com/spreadsheets/d/18G8vPgRr7d0uz90ywfMK6sg9JoocS1nMksOqfvnTdlU/edit?gid=1867012816#gid=1867012816" },
+      { n: 5, t: "조선소 제공 원본 — Shipyard Organization Chart(261016).docx (사내 수령 문서, 접근 권한 필요)", u: "https://drive.google.com/file/d/13rPqBZ6IKu5Xi5WQQLcEZCRVE7LHW-II/view?usp=drivesdk" },
+      { n: 6, t: "NB25K 신조 대시보드 — 조직도 탭 (조직도 업데이트 이력)", u: "https://int-megaline.github.io/NB25K/" },
+      { n: 7, t: "APSSE 조선소 소개 브로셔 (Google Drive) — 기업 개요 · 설비 · 제품 정보", u: "https://drive.google.com/file/d/1u7Rcw6LWXRXjK4x9xtXhdgKVX46i1em2/view?usp=sharing" },
+      { n: 8, t: "안휘성항항그룹 소개 브로셔 (Google Drive)", u: "https://drive.google.com/file/d/1onI7ylMRwDjge3gz3Dol6OCntUe59oRH/view?usp=sharing" },
+      { n: 9, t: "maigoo — 合肥包公园 (包公祠 · 包公墓 · 清风阁) 소개", u: "https://www.maigoo.com/citiao/115283.html" },
+      { n: 10, t: "maigoo — 李鸿章故居陈列馆 소개", u: "https://www.maigoo.com/citiao/58362.html" }
     ]
   };
 })();

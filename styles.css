@@ -689,3 +689,16 @@ main { gap: 28px; }
 .doc > svg:last-child { width: 14px; height: 14px; color: var(--fg-3); }
 .doc b { display: block; font-size: 14px; }
 .doc small { font-size: 12px; color: var(--fg-3); }
+
+/* ---------- 출장자 현지 합류 · 일정 사진 · 장소 정보 ---------- */
+.traveler em { font-style: normal; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; background: var(--green); color: var(--fg); margin-left: 2px; }
+.traveler.join { border-style: dashed; }
+.ev-photo { margin: 0; position: relative; border-radius: 10px; overflow: hidden; max-width: 520px; }
+.ev-photo img { display: block; width: 100%; aspect-ratio: 16 / 8; object-fit: cover; max-width: 100%; }
+.ev-photo figcaption { position: absolute; left: 8px; bottom: 8px; font-size: 11px; padding: 2px 8px; border-radius: 999px; background: rgba(10, 12, 14, .62); color: #fff; }
+.ev-info { border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); padding: 10px 12px; display: grid; gap: 6px; }
+.ev-info-hd { font-size: 11.5px; font-weight: 700; color: var(--fg-2); letter-spacing: .04em; }
+.ev-info dl { margin: 0; display: grid; gap: 4px; }
+.ev-info dl > div { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 8px; font-size: 12.5px; line-height: 1.5; }
+.ev-info dt { color: var(--fg-3); }
+.ev-info dd { margin: 0; color: var(--fg-2); min-width: 0; }

@@ -50,7 +50,7 @@
     $("#heroTitle").textContent = T.title;
     $("#heroSub").textContent = T.period.label + " · " + T.period.nights + " · " + T.purpose;
     $("#travelers").innerHTML = T.travelers.map(function (p) {
-      return '<span class="traveler">' + esc(p.name) + "<small>" + esc(p.role) + "</small></span>";
+      return '<span class="traveler' + (p.join ? " join" : "") + '">' + esc(p.name) + "<small>" + esc(p.role) + "</small>" + (p.join ? "<em>" + esc(p.join) + "</em>" : "") + "</span>";
     }).join("");
     $("#kpis").innerHTML = T.kpis.map(function (k) {
       return '<div class="card kpi"><div class="k">' + esc(k.label) + fn(k.fn) + '</div><div class="v">' + esc(k.value) + '</div><div class="s">' + esc(k.sub) + "</div></div>";
@@ -224,6 +224,8 @@
           '<div class="ev-meta"><span>' + ICON.pin + esc(it.place) + (it.tbd ? ' <em class="tbd">미정</em>' : "") + "</span>" +
           (it.recheck ? '<span><em class="tbd">동선 재확인</em></span>' : "") +
           (it.by && it.by !== "-" ? "<span>" + ICON.car + esc(it.by) + "</span>" : "") + "</div>" +
+          (it.photo ? '<figure class="ev-photo"><img src="' + it.photo + '" alt="' + esc(it.photoCap || it.place) + '" loading="lazy"><figcaption>' + esc(it.photoCap || it.place) + "</figcaption></figure>" : "") +
+          (it.info ? '<div class="ev-info"><div class="ev-info-hd">장소 정보' + fn(it.fnInfo) + "</div><dl>" + it.info.map(function (r) { return "<div><dt>" + esc(r[0]) + "</dt><dd>" + esc(r[1]) + "</dd></div>"; }).join("") + "</dl></div>" : "") +
           placeLinks(it) +
           '<details class="memo"><summary>준비사항 · 메모</summary><p>' + esc(it.memo) + "</p></details>" +
         "</div></li>";
@@ -264,33 +266,6 @@
       '<a class="chip-link" target="_blank" rel="noopener" href="' + p.a + '">' + ICON.ext + "Amap 高德</a></div></div>" +
       '<ul class="reasons">' + T.hotelReasons.map(function (r) { return "<li><b>" + esc(r.k) + "</b><span>" + esc(r.v) + "</span></li>"; }).join("") + "</ul>";
 
-    $("#hotelGrid").innerHTML = T.hotels.map(function (h) {
-      return '<article class="card hotel' + (h.pick ? " pick" : "") + '"><div class="hd"><span class="tag">' + esc(h.tag) + '</span><span class="stars" aria-label="추천도 ' + h.stars + '/5">' + stars(h.stars) + "</span></div>" +
-        "<h4>" + esc(h.name) + fn(h.fn) + "<small>" + esc(h.en) + " · " + h.grade + " (" + h.brand + ")</small></h4>" +
-        "<dl><div><dt>위치</dt><dd>" + esc(h.loc) + "</dd></div><div><dt>조선소 이동</dt><dd>" + esc(h.access) + "</dd></div>" +
-        "<div><dt>장점</dt><dd>" + esc(h.perks) + "</dd></div>" +
-        (h.deal ? '<div><dt>협의 요금</dt><dd class="price">' + esc(h.deal) + "</dd></div>" : "") +
-        '<div><dt>' + (h.deal ? "시트 예상가" : "1박 요금") + '</dt><dd class="price">' + won(h.min) + " ~ " + won(h.max) + "</dd></div>" +
-        "<div><dt>종합 평가</dt><dd>" + esc(h.verdict) + "</dd></div></dl></article>";
-    }).join("");
-
-    /* price range chart (floating bars, ₩80k~220k) */
-    var lo = 80000, hi = 220000, W = 680, L = 150, R = 20, rowH = 36, top = 8;
-    var sx = function (v) { return L + (v - lo) / (hi - lo) * (W - L - R); };
-    var H = top + T.hotels.length * rowH + 26;
-    var svg = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="호텔 1박 예상 요금 범위">';
-    for (var v = lo; v <= hi; v += 20000) {
-      svg += '<line class="gl" x1="' + sx(v) + '" x2="' + sx(v) + '" y1="' + top + '" y2="' + (H - 22) + '"/>';
-      svg += '<text x="' + sx(v) + '" y="' + (H - 6) + '" text-anchor="middle">' + v / 1000 + "k</text>";
-    }
-    T.hotels.forEach(function (h, i) {
-      var y = top + i * rowH + 8;
-      svg += '<text class="lbl" x="0" y="' + (y + 14) + '">' + esc(h.name.replace("더 웨스틴 ", "웨스틴 ").replace("포 포인츠 바이 ", "포 포인츠 ")) + "</text>";
-      svg += '<rect class="bar' + (h.pick ? " pick" : "") + '" x="' + sx(h.min) + '" y="' + y + '" width="' + (sx(h.max) - sx(h.min)) + '" height="20" rx="3"><title>' + esc(h.name) + ": " + won(h.min) + " ~ " + won(h.max) + "</title></rect>";
-      svg += '<text class="val" x="' + (sx(h.max) + 6) + '" y="' + (y + 14) + '" style="font-size:10.5px">' + h.min / 1000 + "–" + h.max / 1000 + "k" + "</text>";
-    });
-    svg += "</svg>";
-    $("#priceChart").innerHTML = "<h4>1박 예상 요금 범위 비교</h4><p>단위: 천원(₩k) · 시트 기재 예상 요금 기준 (협의 전) · 녹색 = 확정 숙소 · 확정 숙소 실제 요금은 메가라인 협의가(약 ¥200/박) 적용</p><div style=\"overflow-x:auto\">" + svg + "</div>";
   }
 
   /* ---------- Site ---------- */
@@ -325,7 +300,7 @@
 
     /* 기업 개요 */
     var P = s.profile;
-    $("#siteProfile").innerHTML = '<div class="sp-hd"><h4>기업 개요</h4><span class="muted small">Enterprise Introduction' + fn(9) + "</span></div>" +
+    $("#siteProfile").innerHTML = '<div class="sp-hd"><h4>기업 개요</h4><span class="muted small">Enterprise Introduction' + fn(7) + "</span></div>" +
       '<dl class="kv">' +
         "<div><dt>회사명</dt><dd>" + esc(s.nameZh) + '<br><span class="muted">' + esc(s.full) + "</span></dd></div>" +
         "<div><dt>설립 · 지분</dt><dd>" + esc(P.owners) + "</dd></div>" +
@@ -367,7 +342,7 @@
   }
 
   /* ---------- Checklist ---------- */
-  var CK = "apsse-check-v1";
+  var CK = "apsse-check-v2";
   function loadChecks() {
     var raw = store.get(CK);
     if (raw) { try { return JSON.parse(raw); } catch (e) {} }
@@ -549,7 +524,7 @@
     var all = [], total = 0;
     O.centers.forEach(function (c) { c.sum = 0; c.depts.forEach(function (d) { d.c = c.c; c.sum += d.n; total += d.n; all.push(d); }); });
     var top = all.slice().sort(function (a, b) { return b.n - a.n; })[0];
-    $("#orgAsOf").innerHTML = "조선소 제공 조직도 " + O.asOf + " 개정본 기준" + fn(7);
+    $("#orgAsOf").innerHTML = "조선소 제공 조직도 " + O.asOf + " 개정본 기준" + fn(5);
     $("#orgKpis").innerHTML = [
       ["총 인원 (약)", total + "명", "부서 인원 합계 · 개략치"],
       ["센터", O.centers.length + "개", O.centers.map(function (c) { return c.ko.replace("센터", ""); }).join(" · ")],
@@ -610,7 +585,7 @@
       rows.map(function (r) {
         var key = [r.ko, r.zh, r.head, r.tel, r.pm, r.pmTel, r.mail].join(" ").toLowerCase();
         return '<tr class="oc' + (r.c || 1) + (r.hl ? " hl" : "") + '" data-k="' + esc(key) + '">' +
-          '<td class="org-cell"><i' + (r.c ? "" : ' style="background:var(--fg)"') + "></i>" + esc(r.ko) + (r.pmNote ? fn(7) : "") + "<small>" + r.zh + "</small></td>" +
+          '<td class="org-cell"><i' + (r.c ? "" : ' style="background:var(--fg)"') + "></i>" + esc(r.ko) + (r.pmNote ? fn(5) : "") + "<small>" + r.zh + "</small></td>" +
           td("담당자", esc(r.head)) + td("연락처", telHTML(r.tel), "ph") +
           td("프로젝트 담당", r.pm ? esc(r.pm) : "") + td("PM 연락처", r.pmTel ? telHTML(r.pmTel) : "", "ph") +
           td("이메일", r.mail ? esc(r.mail) : "", "wide") + "</tr>";
