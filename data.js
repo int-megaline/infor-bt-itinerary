@@ -14,7 +14,7 @@
 
   window.TRIP = {
     revision: "R02",
-    updated: "2026-11-04",
+    updated: "2026-11-11",
     title: "APSSE 비즈니스 출장 종합 여정표",
     region: "중국 안후이성 허페이 · 퉁링",
     period: { start: "2026-12-08", end: "2026-12-10", label: "2026.12.08(화) ~ 12.10(목)", nights: "2박 3일" },
@@ -72,12 +72,12 @@
             by: "직항 (소요 3시간)", memo: "기내식 제공, 현지 시각 11:00 도착 (한국 대비 -1시간)" },
           { t: "11:00 ~ 12:30", s: "2026-12-08T11:00:00+08:00", e: "2026-12-08T12:30:00+08:00", h: [11, 12.5], cat: "move", tag: "입국 & 체크인",
             title: "입국 심사 및 수하물 수취 후 시내 호텔 이동, 체크인 / 짐 보관",
-            place: "더 웨스틴 허페이 바오허 (예정)", g: gmap("The Westin Hefei Baohe"), a: amapSearch("合肥万达威斯汀酒店"),
+            place: "샹그릴라 호텔 허페이 (확정)", g: gmap("Shangri-La Hefei"), a: amapSearch("合肥香格里拉大酒店"),
             by: "전용 차량 (약 45분)", memo: "현지 로밍 / eSIM 데이터 연결 확인, 현지 화폐 / 알리페이 점검" },
           { t: "12:30 ~ 13:45", s: "2026-12-08T12:30:00+08:00", e: "2026-12-08T13:45:00+08:00", h: [12.5, 13.75], cat: "meal", tag: "5시간 투어 ①",
             title: "[오찬] 바오허 완다 플라자 동칭추(同庆楼) 정통 안후이 휘채(徽菜) 비즈니스 오찬",
             place: "바오허 완다 동칭추(同庆楼)", g: gmap("同庆楼 包河万达 合肥"), a: amapSearch("同庆楼 包河万达"),
-            by: "도보 3분 (웨스틴 인접)", memo: "취궤어(臭鳜鱼) 등 대표 휘채 요리 명가, 비즈니스 룸 구비 (완다몰 3층)" },
+            by: "차량 이동 (샹그릴라 → 바오허 완다)", recheck: true, memo: "취궤어(臭鳜鱼) 등 대표 휘채 요리 명가, 비즈니스 룸 구비 (완다몰 3층). 숙소가 웨스틴(완다 인접)에서 샹그릴라로 변경되어 이동 시간 · 식당 위치 재확인 필요" },
           { t: "13:45 ~ 15:15", s: "2026-12-08T13:45:00+08:00", e: "2026-12-08T15:15:00+08:00", h: [13.75, 15.25], cat: "tour", tag: "5시간 투어 ②",
             title: "[역사] 포공사(包公祠) 및 포하공원 유적 시찰",
             place: "포공사 (판관 포청천 사당)", g: gmap("Baogong Memorial Temple Hefei"), a: amapSearch("包公祠"),
@@ -89,7 +89,7 @@
           { t: "17:30 ~ 20:30", s: "2026-12-08T17:30:00+08:00", e: "2026-12-08T20:30:00+08:00", h: [17.5, 20.5], cat: "meal", tag: "석식 & 휴식",
             title: "[석식] 바오허 완다 플라자 루저우타이타이(庐州太太) 디너 후 호텔 복귀",
             place: "바오허 완다 플라자 식당가", g: gmap("庐州太太 包河万达 合肥"), a: amapSearch("庐州太太 包河万达"),
-            by: "도보 3분 (호텔 인접)", memo: "안후이 가정식 명가 '루저우타이타이' 추천, 익일 조선소 출장자료 점검" }
+            by: "차량 이동 (식사 후 샹그릴라 복귀)", recheck: true, memo: "안후이 가정식 명가 '루저우타이타이' 추천, 익일 조선소 출장자료 점검. 숙소 변경에 따라 호텔 인근 식당으로 변경 검토 가능" }
         ]
       },
       {
@@ -97,7 +97,7 @@
         items: [
           { t: "07:30 ~ 08:30", s: "2026-12-09T07:30:00+08:00", e: "2026-12-09T08:30:00+08:00", h: [7.5, 8.5], cat: "rest", tag: "조식 & 출발",
             title: "호텔 조식 후 로비 집결, 퉁링 APSSE 이동 준비",
-            place: "호텔 로비 (더 웨스틴 · 예정)", by: "전용 밴 대기", memo: "비즈니스 캐주얼 및 현장 안전화 지참 확인" },
+            place: "호텔 로비 (샹그릴라 호텔 허페이)", by: "전용 밴 대기", memo: "비즈니스 캐주얼 및 현장 안전화 지참 확인. 도심 숙소로 출근 시간대 정체 감안하여 정시 출발 필요" },
           { t: "08:30 ~ 11:00", s: "2026-12-09T08:30:00+08:00", e: "2026-12-09T11:00:00+08:00", h: [8.5, 11], cat: "move", tag: "장거리 이동",
             title: "허페이 시내 → APSSE 조선소 이동 (G3 경유)",
             place: "안후이성 퉁링시 쭝양현 (M796+MW9)", site: true,
@@ -131,36 +131,82 @@
     ],
 
     hotels: [
-      { id: "h2", tag: "후보 1 · 예정", name: "더 웨스틴 허페이 바오허", en: "The Westin Hefei Baohe", grade: "5성급", brand: "Marriott",
+      { id: "h3", tag: "확정 숙소", name: "샹그릴라 호텔 허페이", en: "Shangri-La Hefei", grade: "5성급", brand: "Shangri-La",
+        loc: "루양구 중심, 포공사 · 이홍장 고거 관광 최인접", access: "도심 중심부로 출근 시간대 약간 정체 감안",
+        perks: "최고급 외빈 접대 식당, 럭셔리 라운지 구비", min: 160000, max: 210000, stars: 4, verdict: "의전 및 관광 최적", pick: true,
+        deal: "1박 약 ¥200 수준 (메가라인 가격 협의 완료)", booker: "강준서 부장 (허페이 현장 · 부킹 담당)",
+        photo: "images/hotel-shangrila.jpg",
+        url: "https://www.shangri-la.com/hefei/shangrila/about", fn: 4, a: amapSearch("合肥香格里拉大酒店") },
+      { id: "h2", tag: "검토 후보", name: "더 웨스틴 허페이 바오허", en: "The Westin Hefei Baohe", grade: "5성급", brand: "Marriott",
         loc: "바오허 완다광장 인접, 허페이 남역 차 15분", access: "남부 고속도로 IC 직결 최적 (편도 2.3h 단축)",
-        perks: "헤븐리 베드, 비즈니스 라운지, 우수한 피트니스", min: 140000, max: 170000, stars: 5, verdict: "최우수 추천 호텔", pick: true,
+        perks: "헤븐리 베드, 비즈니스 라운지, 우수한 피트니스", min: 140000, max: 170000, stars: 5, verdict: "최우수 추천 호텔",
         url: "https://www.marriott.com/en-us/hotels/hfewi-the-westin-hefei-baohe/overview", fn: 2, a: amapSearch("合肥万达威斯汀酒店") },
-      { id: "h1", tag: "후보 2", name: "포 포인츠 바이 쉐라톤 허페이", en: "Four Points by Sheraton Hefei, Baohe", grade: "4성급", brand: "Marriott",
+      { id: "h1", tag: "검토 후보", name: "포 포인츠 바이 쉐라톤 허페이", en: "Four Points by Sheraton Hefei, Baohe", grade: "4성급", brand: "Marriott",
         loc: "바오허구 시내 중심가 인접, 지하철역 도보권", access: "고속도로 진입 20분, 퉁링 이동 보통",
         perks: "가성비 우수, 메리어트 포인트 적립, 깔끔한 룸", min: 95000, max: 120000, stars: 3, verdict: "실속형 출장 추천",
-        url: "https://marriott.com/HFEHF", fn: 3, a: amapSearch("合肥包河福朋喜来登酒店") },
-      { id: "h3", tag: "후보 3", name: "샹그릴라 호텔 허페이", en: "Shangri-La Hefei", grade: "5성급", brand: "Shangri-La",
-        loc: "루양구 중심, 포공사 · 이홍장 고거 관광 최인접", access: "도심 중심부로 출근 시간대 약간 정체 감안",
-        perks: "최고급 외빈 접대 식당, 럭셔리 라운지 구비", min: 160000, max: 210000, stars: 4, verdict: "의전 및 관광 최적",
-        url: "https://www.shangri-la.com/hefei/shangrila/about", fn: 4, a: amapSearch("合肥香格里拉大酒店") }
+        url: "https://marriott.com/HFEHF", fn: 3, a: amapSearch("合肥包河福朋喜来登酒店") }
     ],
     hotelReasons: [
-      { k: "퉁링 이동성", v: "2일차 아침 퉁링 APSSE 조선소 이동 시 허페이 남부 외곽고속도로(G3) IC와 직결되어 도심 출근 정체 우회 가능" },
-      { k: "인프라 편의", v: "바오허 완다 복합몰과 연결, 1일차 5시간 투어 후 석식 · 미팅 룸 · 현지 필요 물품 조달에 최적임" },
-      { k: "비즈니스 신뢰", v: "글로벌 메리어트 5성급 체인으로 영문 소통 원활, 정식 영수증(發票) 발급 및 결제 프로세스 보장됨" }
+      { k: "요금 협의 완료", v: "메가라인과 가격 협의 완료, 1박 약 200위안 수준. 부킹은 허페이 현장 강준서 부장 담당" },
+      { k: "관광 동선", v: "루양구 도심 중심으로 Day 1 투어지(포공사 · 이홍장 고거) 최인접" },
+      { k: "의전 환경", v: "최고급 외빈 접대 식당 및 럭셔리 라운지 구비" },
+      { k: "유의 사항", v: "도심 중심부 위치로 Day 2 아침(08:30) 퉁링 출발 시 출근 시간대 정체 감안 필요" }
     ],
 
     site: {
       name: "APSSE",
-      full: "Anhui Port Sealand Sky Equipment",
+      full: "Anhui Port & Shipping Sealand Equipment Co., Ltd.",
+      nameZh: "安徽港航陆海装备有限公司",
       address: "중국 안후이성 퉁링시 쭝양현",
       addressCn: "安徽省 铜陵市 枞阳县",
       plus: "M796+MW9",
       dms: "30°40'08.9\"N, 117°15'44.5\"E",
       lat: 30.669139, lng: 117.262361,
-      route: ["허페이 시내 (숙소 · 웨스틴 예정)", "G3 징타이 고속도로", "퉁링시 쭝양현 APSSE"],
+      route: ["허페이 시내 (샹그릴라 호텔)", "G3 징타이 고속도로", "퉁링시 쭝양현 APSSE"],
       routeTime: "편도 약 2.5시간",
-      flex: "현지 기상 / 야드 사정에 따라 Day 1 투어와 일정 맞교환 가능"
+      flex: "현지 기상 / 야드 사정에 따라 Day 1 투어와 일정 맞교환 가능",
+      photos: [
+        { src: "images/apsse-aerial.jpg", cap: "조선소 전경 (장강 연안)" },
+        { src: "images/apsse-gantry.jpg", cap: "선대 및 갠트리 크레인" }
+      ],
+      /* 기업 개요 — 조선소 제공 자료 기준 (2026.11 업데이트) */
+      profile: {
+        owners: "안휘성항항그룹(Anhui Port & Shipping Group)과 산동성항구그룹(Shandong Port Group)의 국유기업 합작 투자로 설립",
+        capital: "2.02억 위안",
+        location: "안휘성 퉁링시 쭝양현, 장강 연안",
+        area: "1,296무",
+        areaM2: "약 86.4만 ㎡ (1무 ≈ 666.7㎡ 환산)",
+        quay: "1,050m 심수 의장 전용 안벽",
+        berths: "5만 톤급 선대 6좌 (350 × 60 m)",
+        shops: [
+          { k: "공장 면적 (전체)", v: 50000, total: true },
+          { k: "블록 조립 공장", v: 18000, note: "케미컬선 전용 클린룸 보유" },
+          { k: "배관(管系) 제작 공장", v: 9000 },
+          { k: "분사 · 도장 공장", v: 6000 }
+        ],
+        equipment: "플라즈마 절단기, 1,000T 유압기, 롤링기, 만능 곡판기, 유니버설 트럭 등 조선 설비 100여 대 완비",
+        certs: [
+          { k: "ISO 9001", v: "품질 · CCS" },
+          { k: "ISO 14001", v: "환경 · CCS" },
+          { k: "ISO 45001", v: "직업보건안전 · CCS" },
+          { k: "Bureau Veritas", v: "국제 선급 인증" }
+        ]
+      },
+      products: [
+        { k: "Oil Tanker", v: "4,100 DWT" }, { k: "Chemical Tanker", v: "4,000 DWT" },
+        { k: "Container Vessel", v: "700 TEU" }, { k: "MPV", v: "8,000 DWT" },
+        { k: "Deck Barge", v: "10,000 DWT" }, { k: "Oil Spill Recovery Vessel", v: "500 t" },
+        { k: "PSV", v: "59 m" }, { k: "Dredger", v: "22 m³" },
+        { k: "Robert Tug", v: "" }, { k: "Floating Dock", v: "2,500 t" },
+        { k: "Fishing Platform & Cultivating Boat", v: "" }
+      ],
+      building: [
+        { name: "12,000 DWT 자항식 데크 바지선", owner: "싱가포르", specs: [["길이 (LOA)", "115.98 m"], ["폭 (B)", "28.00 m"], ["재화중량", "12,600 t"], ["선급", "BV"]] }
+      ],
+      brochures: [
+        { t: "조선소 소개 브로셔", d: "APSSE 조선소 소개 자료", u: "https://drive.google.com/file/d/1u7Rcw6LWXRXjK4x9xtXhdgKVX46i1em2/view?usp=sharing", fn: 9 },
+        { t: "그룹 소개 브로셔", d: "안휘성항항그룹 소개 자료", u: "https://drive.google.com/file/d/1onI7ylMRwDjge3gz3Dol6OCntUe59oRH/view?usp=sharing", fn: 10 }
+      ]
     },
 
     /* 조선소 조직도 — 원본: 조선소 제공 「Shipyard Organization Chart(261016).docx」 (2026.10.16 개정본)
@@ -224,6 +270,8 @@
       { n: 5, t: "외교부 — 주상하이 대한민국 총영사관", u: "https://overseas.mofa.go.kr/cn-shanghai-ko/index.do" },
       { n: 7, t: "조선소 제공 원본 — Shipyard Organization Chart(261016).docx (사내 수령 문서, 접근 권한 필요)", u: "https://drive.google.com/file/d/13rPqBZ6IKu5Xi5WQQLcEZCRVE7LHW-II/view?usp=drivesdk" },
       { n: 8, t: "NB25K 신조 대시보드 — 조직도 탭 (조직도 업데이트 이력)", u: "https://int-megaline.github.io/NB25K/" },
+      { n: 9, t: "APSSE 조선소 소개 브로셔 (Google Drive) — 기업 개요 · 설비 · 제품 정보", u: "https://drive.google.com/file/d/1u7Rcw6LWXRXjK4x9xtXhdgKVX46i1em2/view?usp=sharing" },
+      { n: 10, t: "안휘성항항그룹 소개 브로셔 (Google Drive)", u: "https://drive.google.com/file/d/1onI7ylMRwDjge3gz3Dol6OCntUe59oRH/view?usp=sharing" },
       { n: 6, t: "원본 여정표 — Google Sheets (업데이트 R02)", u: "https://docs.google.com/spreadsheets/d/18G8vPgRr7d0uz90ywfMK6sg9JoocS1nMksOqfvnTdlU/edit?gid=1867012816#gid=1867012816" }
     ]
   };

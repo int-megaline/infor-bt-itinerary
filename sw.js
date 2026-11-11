@@ -3,7 +3,7 @@
    - 페이지 · data.js: 네트워크 우선(3초 제한) → 실패 시 캐시
    - 그 외 정적 파일: 캐시 우선 + 백그라운드 갱신
    배포 시 데이터나 파일을 바꾸면 VERSION 값을 올릴 것 */
-var VERSION = "apsse-trip-v7";
+var VERSION = "apsse-trip-v8";
 var SHELL = [
   "./",
   "./index.html",
@@ -16,7 +16,10 @@ var SHELL = [
   "./icons/icon-512.png",
   "./icons/icon-maskable-512.png",
   "./icons/apple-touch-icon.png",
-  "./icons/favicon-32.png"
+  "./icons/favicon-32.png",
+  "./images/hotel-shangrila.jpg",
+  "./images/apsse-aerial.jpg",
+  "./images/apsse-gantry.jpg"
 ];
 
 self.addEventListener("install", function (e) {

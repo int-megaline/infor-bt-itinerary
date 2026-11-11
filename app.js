@@ -222,6 +222,7 @@
         '<div class="ev-time"><div class="t">' + splitTime(it.t) + '</div><span class="ev-tag">' + esc(it.tag) + '</span><span class="now-badge" hidden>● NOW</span></div>' +
         '<div class="ev-body"><h3>' + esc(it.title) + "</h3>" +
           '<div class="ev-meta"><span>' + ICON.pin + esc(it.place) + (it.tbd ? ' <em class="tbd">미정</em>' : "") + "</span>" +
+          (it.recheck ? '<span><em class="tbd">동선 재확인</em></span>' : "") +
           (it.by && it.by !== "-" ? "<span>" + ICON.car + esc(it.by) + "</span>" : "") + "</div>" +
           placeLinks(it) +
           '<details class="memo"><summary>준비사항 · 메모</summary><p>' + esc(it.memo) + "</p></details>" +
@@ -254,8 +255,10 @@
   function renderHotels() {
     var p = T.hotels.filter(function (h) { return h.pick; })[0];
     $("#hotelPick").innerHTML =
-      '<div class="main"><div class="label">Planned · 숙소 예정 (2박 · 미확정)</div><h3>' + esc(p.name) + fn(p.fn) + '</h3><div class="en">' + esc(p.en) + "</div>" +
-      '<div class="facts"><span class="fact">' + p.grade + " · " + p.brand + '</span><span class="fact">1박 ' + won(p.min) + " ~ " + won(p.max) + '</span><span class="fact">' + esc(p.loc) + "</span></div>" +
+      (p.photo ? '<figure class="hotel-photo"><img src="' + p.photo + '" alt="' + esc(p.name) + ' 외관" loading="lazy" width="1063" height="703"><figcaption>' + esc(p.name) + " 외관</figcaption></figure>" : "") +
+      '<div class="main"><div class="label">Confirmed · 숙소 확정 (2박)</div><h3>' + esc(p.name) + fn(p.fn) + '</h3><div class="en">' + esc(p.en) + "</div>" +
+      '<div class="deal"><div><span>협의 요금</span><b>' + esc(p.deal) + "</b></div><div><span>부킹 담당</span><b>" + esc(p.booker) + "</b></div></div>" +
+      '<div class="facts"><span class="fact">' + p.grade + " · " + p.brand + '</span><span class="fact">' + esc(p.loc) + "</span></div>" +
       '<div class="links"><a class="chip-link" target="_blank" rel="noopener" href="' + p.url + '">' + ICON.ext + "공식 페이지</a>" +
       '<a class="chip-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(p.en) + '">' + ICON.ext + "Google 지도</a>" +
       '<a class="chip-link" target="_blank" rel="noopener" href="' + p.a + '">' + ICON.ext + "Amap 高德</a></div></div>" +
@@ -265,7 +268,9 @@
       return '<article class="card hotel' + (h.pick ? " pick" : "") + '"><div class="hd"><span class="tag">' + esc(h.tag) + '</span><span class="stars" aria-label="추천도 ' + h.stars + '/5">' + stars(h.stars) + "</span></div>" +
         "<h4>" + esc(h.name) + fn(h.fn) + "<small>" + esc(h.en) + " · " + h.grade + " (" + h.brand + ")</small></h4>" +
         "<dl><div><dt>위치</dt><dd>" + esc(h.loc) + "</dd></div><div><dt>조선소 이동</dt><dd>" + esc(h.access) + "</dd></div>" +
-        "<div><dt>장점</dt><dd>" + esc(h.perks) + '</dd></div><div><dt>1박 요금</dt><dd class="price">' + won(h.min) + " ~ " + won(h.max) + "</dd></div>" +
+        "<div><dt>장점</dt><dd>" + esc(h.perks) + "</dd></div>" +
+        (h.deal ? '<div><dt>협의 요금</dt><dd class="price">' + esc(h.deal) + "</dd></div>" : "") +
+        '<div><dt>' + (h.deal ? "시트 예상가" : "1박 요금") + '</dt><dd class="price">' + won(h.min) + " ~ " + won(h.max) + "</dd></div>" +
         "<div><dt>종합 평가</dt><dd>" + esc(h.verdict) + "</dd></div></dl></article>";
     }).join("");
 
@@ -282,10 +287,10 @@
       var y = top + i * rowH + 8;
       svg += '<text class="lbl" x="0" y="' + (y + 14) + '">' + esc(h.name.replace("더 웨스틴 ", "웨스틴 ").replace("포 포인츠 바이 ", "포 포인츠 ")) + "</text>";
       svg += '<rect class="bar' + (h.pick ? " pick" : "") + '" x="' + sx(h.min) + '" y="' + y + '" width="' + (sx(h.max) - sx(h.min)) + '" height="20" rx="3"><title>' + esc(h.name) + ": " + won(h.min) + " ~ " + won(h.max) + "</title></rect>";
-      svg += '<text class="val" x="' + (sx(h.max) + 6) + '" y="' + (y + 14) + '" style="font-size:10.5px">' + h.min / 1000 + "–" + h.max / 1000 + "k</text>";
+      svg += '<text class="val" x="' + (sx(h.max) + 6) + '" y="' + (y + 14) + '" style="font-size:10.5px">' + h.min / 1000 + "–" + h.max / 1000 + "k" + "</text>";
     });
     svg += "</svg>";
-    $("#priceChart").innerHTML = "<h4>1박 예상 요금 범위 비교</h4><p>단위: 천원(₩k) · 시트 기재 예상 요금 기준 · 녹색 = 예정 숙소 (후보 1)</p><div style=\"overflow-x:auto\">" + svg + "</div>";
+    $("#priceChart").innerHTML = "<h4>1박 예상 요금 범위 비교</h4><p>단위: 천원(₩k) · 시트 기재 예상 요금 기준 (협의 전) · 녹색 = 확정 숙소 · 확정 숙소 실제 요금은 메가라인 협의가(약 ¥200/박) 적용</p><div style=\"overflow-x:auto\">" + svg + "</div>";
   }
 
   /* ---------- Site ---------- */
@@ -299,7 +304,7 @@
   function renderSite() {
     var s = T.site, l = siteLinks();
     $("#siteInfo").innerHTML =
-      '<div class="hd"><b>' + s.name + "</b><span>" + esc(s.full) + "</span></div>" +
+      '<div class="hd"><b>' + s.name + "</b><span>" + esc(s.full) + '</span><span class="zh">' + esc(s.nameZh) + "</span></div>" +
       '<dl class="kv">' +
         "<div><dt>상세 주소</dt><dd>" + esc(s.address) + '<br><span class="muted">' + s.addressCn + "</span></dd></div>" +
         '<div><dt>Plus Code</dt><dd><span class="mono">' + s.plus + '</span><button class="copy-btn" data-copy="' + s.plus + '">복사</button></dd></div>' +
@@ -312,6 +317,53 @@
       '<ol class="route-steps">' + s.route.map(function (r, i) { return '<li><span class="dot">' + (i + 1) + "</span><span>" + esc(r) + "</span></li>"; }).join("") + "</ol>" +
       '<div class="route-time">Day 2 · 08:30 출발 → 11:00 도착 · ' + s.routeTime + "</div>" +
       '<div class="flex-note">일정 유동성: ' + esc(s.flex) + "</div>";
+
+    /* 사진 */
+    $("#sitePhotos").innerHTML = s.photos.map(function (ph) {
+      return '<figure class="card site-photo"><img src="' + ph.src + '" alt="' + esc(ph.cap) + '" loading="lazy"><figcaption>' + esc(ph.cap) + "</figcaption></figure>";
+    }).join("");
+
+    /* 기업 개요 */
+    var P = s.profile;
+    $("#siteProfile").innerHTML = '<div class="sp-hd"><h4>기업 개요</h4><span class="muted small">Enterprise Introduction' + fn(9) + "</span></div>" +
+      '<dl class="kv">' +
+        "<div><dt>회사명</dt><dd>" + esc(s.nameZh) + '<br><span class="muted">' + esc(s.full) + "</span></dd></div>" +
+        "<div><dt>설립 · 지분</dt><dd>" + esc(P.owners) + "</dd></div>" +
+        '<div><dt>자본금</dt><dd><b class="num">' + esc(P.capital) + "</b></dd></div>" +
+        "<div><dt>위치</dt><dd>" + esc(P.location) + "</dd></div>" +
+        '<div><dt>부지 면적</dt><dd><b class="num">' + esc(P.area) + '</b><br><span class="muted small">' + esc(P.areaM2) + "</span></dd></div>" +
+        "<div><dt>안벽</dt><dd>" + esc(P.quay) + "</dd></div>" +
+        "<div><dt>인증</dt><dd><div class=\"certs\">" + P.certs.map(function (c) { return '<span class="cert"><b>' + esc(c.k) + "</b>" + esc(c.v) + "</span>"; }).join("") + "</div></dd></div>" +
+      "</dl>";
+
+    /* 설비 · 인프라 (공장 면적 막대: 0~50,000㎡) */
+    var mx = 50000;
+    $("#siteFacility").innerHTML = '<div class="sp-hd"><h4>설비 및 인프라</h4><span class="muted small">단위: ㎡</span></div>' +
+      '<div class="berth"><span class="k">선대</span><b>' + esc(P.berths) + "</b></div>" +
+      '<div class="hbars fac">' + P.shops.map(function (f) {
+        return '<div class="hbar ' + (f.total ? "tot" : "shop") + '"><span class="lb" title="' + esc(f.k) + '">' + esc(f.k) + (f.note ? ' <i class="tip" tabindex="0" data-tip="' + esc(f.note) + '">i</i>' : "") +
+          '</span><div class="tr"><div class="fl" style="width:' + (f.v / mx * 100) + '%"></div></div><span class="vv">' + (f.v / 10000).toLocaleString("ko-KR") + "만</span></div>";
+      }).join("") + '</div><div class="haxis fac"><span></span><div class="ticks"><span>0</span><span>1만</span><span>2만</span><span>3만</span><span>4만</span><span>5만</span></div><span></span></div>' +
+      '<p class="small" style="margin:4px 0 0">' + esc(P.equipment) + "</p>";
+
+    /* 주요 제품 */
+    $("#siteProducts").innerHTML = '<div class="sp-hd"><h4>주요 제품</h4><span class="muted small">상선 및 특수선</span></div>' +
+      '<ul class="prod">' + s.products.map(function (pr) {
+        return "<li><b>" + esc(pr.k) + "</b>" + (pr.v ? '<span class="mono">' + esc(pr.v) + "</span>" : "") + "</li>";
+      }).join("") + "</ul>";
+
+    /* 건조 중 프로젝트 */
+    $("#siteBuilding").innerHTML = '<div class="sp-hd"><h4>주요 건조 중 프로젝트</h4><span class="muted small">Vessels Under Construction</span></div>' +
+      s.building.map(function (b) {
+        return '<div class="bld"><div class="bld-t"><b>' + esc(b.name) + '</b><span class="fact">선주국 · ' + esc(b.owner) + "</span></div>" +
+          '<dl class="specs">' + b.specs.map(function (x) { return "<div><dt>" + esc(x[0]) + '</dt><dd class="mono">' + esc(x[1]) + "</dd></div>"; }).join("") + "</dl></div>";
+      }).join("");
+
+    /* 브로셔 */
+    $("#siteDocs").innerHTML = '<div class="sp-hd"><h4>조선소 브로셔</h4><span class="muted small">Google Drive</span></div>' +
+      '<div class="docs">' + s.brochures.map(function (d) {
+        return '<a class="doc" target="_blank" rel="noopener" href="' + d.u + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg><span><b>' + esc(d.t) + "</b><small>" + esc(d.d) + "</small></span>" + ICON.ext + "</a>";
+      }).join("") + '</div><p class="small muted" style="margin:0">Google Drive는 중국 현지에서 접속 불가 · 출국 전 열람 또는 휴대폰 다운로드 권장</p>';
   }
 
   /* ---------- Checklist ---------- */

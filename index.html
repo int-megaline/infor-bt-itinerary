@@ -70,8 +70,8 @@
       <button type="button" data-goday="d2">Day 2 · 12/09</button>
       <button type="button" data-goday="d3">Day 3 · 12/10</button>
     </div>
-    <a href="#hotel" data-jump="hotel" data-nav="hotel"><i>04</i>숙소<small>예정 · 더 웨스틴 허페이 바오허 (미확정)</small></a>
-    <a href="#site" data-jump="site" data-nav="site"><i>05</i>조선소<small>위치 · 이동 경로</small></a>
+    <a href="#hotel" data-jump="hotel" data-nav="hotel"><i>04</i>숙소<small>확정 · 샹그릴라 호텔 허페이</small></a>
+    <a href="#site" data-jump="site" data-nav="site"><i>05</i>조선소<small>위치 · 기업 개요 · 설비 · 브로셔</small></a>
     <a href="#org" data-jump="org" data-nav="org"><i>06</i>조직도<small>APSSE 조직 · 연락처</small></a>
     <a href="#check" data-jump="check" data-nav="check"><i>07</i>기타 (점검 · 비상)<small>체크리스트 · 비상 연락망 · 출처</small></a>
   </nav>
@@ -130,7 +130,7 @@
 
   <!-- ④ Hotel -->
   <section class="page" data-page="hotel" id="hotel" aria-labelledby="h-hotel">
-    <div class="sec-head"><div><span class="eyebrow">Hotel</span><h2 id="h-hotel">숙소 및 후보 비교</h2></div><p>숙소 미확정 · 조선소 이동 동선 · 비즈니스 환경 기준</p></div>
+    <div class="sec-head"><div><span class="eyebrow">Hotel</span><h2 id="h-hotel">숙소 및 후보 비교</h2></div><p>숙소 확정 · 샹그릴라 호텔 허페이 (협의가 약 ¥200/박)</p></div>
     <div class="card hotel-pick" id="hotelPick"></div>
     <div class="hotel-grid" id="hotelGrid"></div>
     <div class="card price-chart" id="priceChart"></div>
@@ -138,10 +138,22 @@
 
   <!-- ⑤ Site -->
   <section class="page" data-page="site" id="site" aria-labelledby="h-site">
-    <div class="sec-head"><div><span class="eyebrow">Shipyard</span><h2 id="h-site">APSSE 조선소 현장 정보</h2></div><p>Anhui Port Sealand Sky Equipment</p></div>
+    <div class="sec-head"><div><span class="eyebrow">Shipyard</span><h2 id="h-site">APSSE 조선소 현장 정보</h2></div><p>安徽港航陆海装备有限公司</p></div>
+    <div class="site-photos" id="sitePhotos"></div>
     <div class="site-grid">
       <div class="card site-info" id="siteInfo"></div>
       <div class="card route-card" id="routeCard"></div>
+    </div>
+    <div class="site-grid2">
+      <div class="card sp" id="siteProfile"></div>
+      <div class="card sp" id="siteFacility"></div>
+    </div>
+    <div class="site-grid2">
+      <div class="card sp" id="siteProducts"></div>
+      <div class="sp-stack">
+        <div class="card sp" id="siteBuilding"></div>
+        <div class="card sp" id="siteDocs"></div>
+      </div>
     </div>
   </section>
 
